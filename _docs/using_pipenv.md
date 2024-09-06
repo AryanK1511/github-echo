@@ -93,9 +93,3 @@
   ```bash
     pipenv run pytest
   ```
-
-- **Export `Pipfile.lock` to `requirements.txt`**
-
-  ```bash
-    pipenv lock -r > requirements.txt
-  ```
