@@ -12,8 +12,9 @@ from application.core.gemini_model import get_gemini_summary
 from application.core.github_api import fetch_github_data
 from application.utils.parser import parse_github_url
 
-app = typer.Typer()
-console = Console()
+# Console instances for standard and error output
+console = Console(soft_wrap=True)
+err_console = Console(stderr=True, soft_wrap=True)
 
 __version__ = "0.1.0"
 
@@ -63,6 +64,7 @@ def process_tasks(github_repository_url: str, output_file: Optional[Path]):
         repo_data_json = asyncio.run(
             fetch_github_data(github_username, github_repository_name)
         )
+
         progress.advance(task)
         time.sleep(0.3)
 

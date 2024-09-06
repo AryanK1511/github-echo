@@ -37,6 +37,10 @@ async def fetch_github_data(owner: str, repo: str) -> Dict[str, Any]:
         fetch_community_profile(owner, repo),
     )
 
+    # Raise an error if any of the fetch functions failed or no data was returned
+    if not all(results):
+        raise ValueError("Failed to fetch data for the repository")
+
     # Combine the results into a single JSON object and return it
     combined_data = {
         "repository_metadata": results[0],
