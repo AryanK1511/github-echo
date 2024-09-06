@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 typer = "*"
+google-generativeai = "*"
+python-dotenv = "*"
 
 [dev-packages]
 ruff = "*"
