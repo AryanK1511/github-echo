@@ -6,3 +6,4 @@
 - [How to build a CLI Tool using Python]()
 - [Using Google Gemini](https://ai.google.dev/gemini-api/docs/quickstart?lang=python)
 - [Python import: Advanced Techniques and Tips](https://realpython.com/python-import/#modules)
+- [Text Generation using the Google Gemini API](https://ai.google.dev/gemini-api/docs/text-generation?lang=python)
