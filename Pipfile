@@ -8,6 +8,8 @@ typer = "*"
 google-generativeai = "*"
 python-dotenv = "*"
 httpx = "*"
+setuptools = "*"
+wheel = "*"
 
 [dev-packages]
 ruff = "*"
