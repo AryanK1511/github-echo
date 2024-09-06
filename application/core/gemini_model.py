@@ -3,7 +3,7 @@ from typing import Dict
 import google.generativeai as genai
 
 from _config import GOOGLE_GEMINI_API_KEY
-from application.utils.gemini_details import (
+from application.utils.gemini_config import (
     GEMINI_MODEL,
     GEMINI_PROMPT,
     GEMINI_SYSTEM_INSTRUCTION,
