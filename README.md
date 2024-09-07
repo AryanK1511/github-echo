@@ -105,13 +105,13 @@ You can use this tool in two ways:
 - Now you can run the CLI tool from anywhere in your terminal:
 
   ```bash
-  github-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
+  gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
   ```
 
   Example:
 
   ```bash
-  github-echo https://github.com/user/repo --output results.md
+  gh-echo https://github.com/user/repo --output results.md
   ```
 
 ## Running the tool locally
