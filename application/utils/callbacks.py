@@ -16,7 +16,7 @@ from application.utils.parser import parse_github_url
 console = Console(soft_wrap=True)
 err_console = Console(stderr=True, soft_wrap=True)
 
-__version__ = "0.1.0"
+__version__ = "0.0.7"
 
 
 def version_callback(value: bool):
@@ -25,7 +25,7 @@ def version_callback(value: bool):
     Prints the version number and exits the application if the flag is provided.
     """
     if value:
-        print(f"Awesome CLI Version: {__version__}")
+        print(f"github-echo Version: {__version__}")
         raise typer.Exit()
 
 
