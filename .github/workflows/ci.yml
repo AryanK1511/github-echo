@@ -11,7 +11,7 @@ on:
 
 jobs:
   lint:
-    name: Lint with Ruff
+    name: Lint with Ruff and Markdownlint
     runs-on: ubuntu-latest
 
     steps:
@@ -23,10 +23,21 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install ruff
 
       - name: Run Ruff
         run: ruff check .
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # or the version you need
+
+      - name: Install Markdownlint
+        run: npm install -g markdownlint-cli
+
+      - name: Run Markdownlint
+        run: markdownlint '**/*.md'
