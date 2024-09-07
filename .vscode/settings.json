@@ -2,6 +2,12 @@
   "editor.insertSpaces": true,
   "files.eol": "\n",
   "files.insertFinalNewline": true,
+  "editor.rulers": [88],
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -10,5 +16,8 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "editor.rulers": [88]
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
