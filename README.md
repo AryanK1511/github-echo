@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100%" src="./assets/logo.png"><br /><br />
+  <img width="100%" src="https://github.com/AryanK1511/github-echo/blob/main/assets/logo.png?raw=true"><br /><br />
   <strong>A command-line tool built to obtain in-depth, actionable information about GitHub repositories that is often challenging to decipher manually</strong><br /><br />
 </p>
 
