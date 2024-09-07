@@ -21,19 +21,19 @@
   ```
 
 - **Install a Package as a Development Dependency**
-  
+
   ```bash
     pipenv install <package-name> --dev
   ```
 
 - **Uninstall a Package**
-  
+
   ```bash
     pipenv uninstall <package-name>
   ```
 
 - **Update All Packages**
-  
+
   ```bash
     pipenv update
   ```
@@ -93,3 +93,7 @@
   ```bash
     pipenv run pytest
   ```
+
+## Author
+
+[Aryan Khurana](https://www.github.com/AryanK1511)

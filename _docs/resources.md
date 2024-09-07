@@ -1,5 +1,7 @@
 # Resources Used
 
+Here is a list of some resources that were used while building this tool.
+
 - [Official Documentation to learn Typer](https://typer.tiangolo.com/tutorial/)
 - [Dsiplaying data in the CLI using `rich`](https://typer.tiangolo.com/tutorial/printing/#printing-to-standard-error)
 - [How to build and distribute a CLI Tool with Python](https://medium.com/nerd-for-tech/how-to-build-and-distribute-a-cli-tool-with-python-537ae41d9d78)
@@ -10,3 +12,7 @@
 - [Python Packaging User Guide](https://packaging.python.org/en/latest/)
 - [Packaging python projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 - [Using a `Manifest.in` file alongside `pyproject.toml`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
+
+## Author
+
+[Aryan Khurana](https://www.github.com/AryanK1511)
