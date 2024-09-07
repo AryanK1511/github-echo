@@ -73,7 +73,7 @@ You can use this tool in two ways:
 2. Install the tool via PyPi:
 
    ```bash
-   pip install github-echo
+   pip install gh-echo
    ```
 
 3. Once installed, you need to set the required environment variables in your shell configuration. Here are the steps for different systems:
