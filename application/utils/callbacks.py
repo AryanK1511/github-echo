@@ -16,7 +16,7 @@ from application.utils.parser import parse_github_url
 console = Console(soft_wrap=True)
 err_console = Console(stderr=True, soft_wrap=True)
 
-__version__ = "0.0.7"
+__version__ = "0.0.1"
 
 
 def version_callback(value: bool):
