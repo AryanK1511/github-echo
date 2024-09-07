@@ -54,7 +54,10 @@ def github_repo_insights(
         err_console.print("\n[bold red]🚨 Something went wrong![/bold red]\n")
         err_console.print(f"[red]💡 [bold]Error:[/bold] {e}\n", highlight=True)
         err_console.print(
-            "[bold yellow]Tip:[/bold yellow] Ensure the GitHub URL is valid and check your internet connection.\n"
+            "[bold yellow]Tip:[/bold yellow] Ensure the GitHub URL is valid, Environment variables are set up, and your internet connection is stable.\n"
+        )
+        err_console.print(
+            "[bold green]For more information, please refer to the project README File.\n"
         )
         raise typer.Exit(code=1)
 
