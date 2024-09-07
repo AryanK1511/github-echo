@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "github-echo"
+name = "gh-echo"
 version = "0.0.1"
 authors = [
   { name="Aryan Khurana", email="aryankhurana1511@gmail.com" },
