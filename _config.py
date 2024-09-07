@@ -1,12 +1,12 @@
 import os
 from os.path import abspath, dirname, join
 
+from dotenv import load_dotenv
 from rich.console import Console
 
 # Console instances for standard and error output
 err_console = Console(stderr=True, soft_wrap=True)
 
-from dotenv import load_dotenv
 
 dotenv_path = join(dirname(abspath(__file__)), ".env")
 
