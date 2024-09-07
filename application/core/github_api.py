@@ -26,6 +26,7 @@ async def fetch_github_data(owner: str, repo: str) -> Dict[str, Any]:
     """
 
     # Run all the fetch functions concurrently
+
     results = await asyncio.gather(
         fetch_repo_metadata(owner, repo),
         fetch_commits_history(owner, repo),
@@ -38,7 +39,7 @@ async def fetch_github_data(owner: str, repo: str) -> Dict[str, Any]:
     )
 
     # Raise an error if any of the fetch functions failed or no data was returned
-    if not all(results):
+    if any(result is None for result in results):
         raise ValueError("Failed to fetch data for the repository")
 
     # Combine the results into a single JSON object and return it

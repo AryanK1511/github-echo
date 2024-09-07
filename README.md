@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100%" src="./assets/logo.png"><br /><br />
+  <img width="100%" src="https://github.com/AryanK1511/github-echo/blob/main/assets/logo.png?raw=true"><br /><br />
   <strong>A command-line tool built to obtain in-depth, actionable information about GitHub repositories that is often challenging to decipher manually</strong><br /><br />
 </p>
 
@@ -23,30 +23,98 @@
 
 ## Table of Contents
 
-- [Usage](#usage)
-  - [Prerequisites](#prerequisites)
-  - [Setup Instructions](#setup-instructions)
-    - [1. Clone the Repository](#1-clone-the-repository)
-    - [2. Set Up Environment Variables](#2-set-up-environment-variables)
-    - [3. Install Required Dependencies](#3-install-required-dependencies)
-  - [Running the CLI Tool](#running-the-cli-tool)
-    - [On Windows](#on-windows)
-    - [On macOS and Linux](#on-macos-and-linux)
-  - [Additional Information](#additional-information)
-  - [Troubleshooting](#troubleshooting)
-- [Further Usage Instructions](#further-usage-instructions)
-  - [Arguments](#arguments)
-  - [Options](#options)
-- [More about `github-echo`](#more-about-github-echo)
-  - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
-  - [Gemini GenAI Integration](#gemini-genai-integration)
-- [Contributing](#contributing)
-- [License](#license)
-- [Author](#author)
+1. [Usage](#usage)
+   - [Installing via PyPi](#installing-via-pypi)
+   - [Running the Tool Locally](#running-the-tool-locally)
+2. [Installing via PyPi](#installing-via-pypi)
+   - [Prerequisites](#prerequisites)
+   - [Setup Instructions](#setup-instructions)
+     - [For macOS/Linux](#for-macoslinux)
+     - [For Windows](#for-windows)
+3. [Running the Tool Locally](#running-the-tool-locally)
+   - [Prerequisites](#prerequisites-1)
+   - [Setup Instructions](#setup-instructions-1)
+     - [1. Clone the Repository](#1-clone-the-repository)
+     - [2. Set Up Environment Variables](#2-set-up-environment-variables)
+     - [3. Install Required Dependencies](#3-install-required-dependencies)
+     - [4. Running the CLI Tool Locally](#4-running-the-cli-tool-locally)
+       - [On Windows](#on-windows)
+       - [On macOS and Linux](#on-macos-and-linux)
+4. [Additional Information](#additional-information)
+   - [Troubleshooting](#troubleshooting)
+5. [Further Usage Instructions](#further-usage-instructions)
+   - [Arguments](#arguments)
+   - [Options](#options)
+6. [More about `github-echo`](#more-about-github-echo)
+   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
+   - [Gemini GenAI Integration](#gemini-genai-integration)
+     - [How It Works](#how-it-works)
+7. [Contributing](#contributing)
+8. [License](#license)
+9. [Author](#author)
 
 ## Usage
 
-This tool has not been converted into a package yet so the only way to run this tool is to clone the repository and run it locally. Here are the steps to do so.
+You can use this tool in two ways:
+
+1. **[Install via PyPi](#installing-via-pypi)**: Quickly set up the tool with a simple `pip install`.
+2. **[Run Locally](#running-the-tool-locally)**: Clone the repository and run it directly on your machine for development or testing.
+
+## Installing via `PyPi`
+
+### Prerequisites
+
+1. **Python3+**: Ensure `Python3` is installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+
+### Setup Instructions
+
+1. Open a terminal or command prompt.
+
+2. Install the tool via PyPi:
+
+   ```bash
+   pip install github-echo
+   ```
+
+3. Once installed, you need to set the required environment variables in your shell configuration. Here are the steps for different systems:
+
+#### For macOS/Linux
+
+- Open your terminal.
+- Add the environment variables to your shell configuration file (e.g., `.bashrc`, `.zshrc`, etc.)
+
+  ```bash
+  export GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key'
+  export GITHUB_API_TOKEN='Your GitHub API Token'
+  export GITHUB_API_VERSION='2022-11-28'
+  ```
+
+- Run `source ~/.bashrc` (or `source ~/.zshrc` for Zsh) to apply the changes.
+
+#### For Windows
+
+- Open PowerShell as Administrator.
+- Set the environment variables:
+
+  ```powershell
+  [System.Environment]::SetEnvironmentVariable('GOOGLE_GEMINI_API_KEY', 'Your Google Gemini API Key', 'User')
+  [System.Environment]::SetEnvironmentVariable('GITHUB_API_TOKEN', 'Your GitHub API Token', 'User')
+  [System.Environment]::SetEnvironmentVariable('GITHUB_API_VERSION', '2022-11-28', 'User')
+  ```
+
+- Now you can run the CLI tool from anywhere in your terminal:
+
+  ```bash
+  gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
+  ```
+
+  Example:
+
+  ```bash
+  gh-echo https://github.com/user/repo --output results.md
+  ```
+
+## Running the tool locally
 
 ### Prerequisites
 
@@ -66,7 +134,7 @@ cd github-echo
 
 #### 2. Set Up Environment Variables
 
-Create a `.env` file in the root of the repository and add the following content:
+For running the tool locally, create a `.env` file in the root of the repository and add the following content:
 
 ```text
 GOOGLE_GEMINI_API_KEY='Your API Key'
@@ -76,21 +144,24 @@ GITHUB_API_VERSION='2022-11-28'
 
 - Replace `'Your API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey).
 - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-- `GITHUB_API_VERSION` can be left as is unless you need a specific version.
 
 #### 3. Install Required Dependencies
 
 Install the necessary Python packages using `pipenv`:
 
-1. `pip install pipenv`: Install `pipenv`.
-2. `pipenv shell`: Activate the virtual environment.
-3. `pipenv install`: Install all the required dependencies.
+```bash
+pip install pipenv
+pipenv shell
+pipenv install
+```
 
-For more information on how to use `pipenv` read this [documentation](./_docs/using_pipenv.md) that I wrote.
+This will activate the virtual environment and will also install all the dependencies that aare required.
 
-### Running the CLI Tool
+#### 4. Running the CLI Tool Locally
 
-#### On Windows
+Once the environment is set up and dependencies are installed, you can run the tool locally.
+
+##### On Windows
 
 1. Open Command Prompt or PowerShell.
 
@@ -112,7 +183,7 @@ For more information on how to use `pipenv` read this [documentation](./_docs/us
    python _main.py https://github.com/user/repo --output results.md
    ```
 
-#### On macOS and Linux
+##### On macOS and Linux
 
 1. Open Terminal.
 
@@ -122,7 +193,7 @@ For more information on how to use `pipenv` read this [documentation](./_docs/us
    cd /path/to/github-echo
    ```
 
-3. Make the script executable:
+3. Make the script executable (if needed):
 
    ```bash
    chmod +x _main.py
@@ -140,7 +211,7 @@ For more information on how to use `pipenv` read this [documentation](./_docs/us
    ./_main.py https://github.com/user/repo --output results.md
    ```
 
-### Additional Information
+## Additional Information
 
 - **For Help**: Run `./_main.py --help` or `python _main.py --help` to see the available options and usage instructions.
 - **For Version**: Use the `--version` or `-v` flag to get the version number.

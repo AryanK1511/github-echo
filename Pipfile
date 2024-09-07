@@ -10,6 +10,8 @@ python-dotenv = "*"
 httpx = "*"
 setuptools = "*"
 wheel = "*"
+build = "*"
+twine = "*"
 
 [dev-packages]
 ruff = "*"

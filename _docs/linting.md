@@ -33,3 +33,7 @@ Ruff can also automatically fix some issues. To apply fixes, use the `--fix` opt
 ```bash
 ruff check --fix path/to/your/code
 ```
+
+## Author
+
+[Aryan Khurana](https://www.github.com/AryanK1511)
