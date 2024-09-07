@@ -7,3 +7,6 @@
 - [Python import: Advanced Techniques and Tips](https://realpython.com/python-import/#modules)
 - [Text Generation using the Google Gemini API](https://ai.google.dev/gemini-api/docs/text-generation?lang=python)
 - [GitHub API Docs](https://docs.github.com/en/rest?apiVersion=2022-11-28)
+- [Python Packaging User Guide](https://packaging.python.org/en/latest/)
+- [Packaging python projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
+- [Using a `Manifest.in` file alongside `pyproject.toml`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
