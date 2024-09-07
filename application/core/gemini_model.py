@@ -10,7 +10,13 @@ from application.utils.gemini_config import (
 )
 
 # Configure the Gemini GenAI API in order to make requests to it
-genai.configure(api_key=GOOGLE_GEMINI_API_KEY)
+try:
+    genai.configure(api_key=GOOGLE_GEMINI_API_KEY)
+except Exception:
+    raise Exception(
+        "Failed to configure the Gemini GenAI API. Check whether the API key is valid."
+    )
+
 model = genai.GenerativeModel(
     model_name=GEMINI_MODEL, system_instruction=GEMINI_SYSTEM_INSTRUCTION
 )
