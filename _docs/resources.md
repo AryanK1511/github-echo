@@ -12,6 +12,7 @@ Here is a list of some resources that were used while building this tool.
 - [Python Packaging User Guide](https://packaging.python.org/en/latest/)
 - [Packaging python projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 - [Using a `Manifest.in` file alongside `pyproject.toml`](https://setuptools.pypa.io/en/latest/userguide/miscellaneous.html)
+- [Using `poetry` for Python dependency management](https://python-poetry.org/docs/)
 
 ## Author
 
