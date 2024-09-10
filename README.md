@@ -37,7 +37,7 @@
      - [1. Clone the Repository](#1-clone-the-repository)
      - [2. Set Up Environment Variables](#2-set-up-environment-variables)
      - [3. Install Required Dependencies](#3-install-required-dependencies)
-     - [4. Running the CLI Tool Locally](#4-running-the-cli-tool-locally)
+     - [4. Running the CLI Tool Locally](#5-running-the-cli-tool-locally)
        - [On Windows](#on-windows)
        - [On macOS and Linux](#on-macos-and-linux)
 4. [Additional Information](#additional-information)
@@ -48,7 +48,6 @@
 6. [More about `github-echo`](#more-about-github-echo)
    - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
    - [Gemini GenAI Integration](#gemini-genai-integration)
-     - [How It Works](#how-it-works)
 7. [Contributing](#contributing)
 8. [License](#license)
 9. [Author](#author)
@@ -114,12 +113,13 @@ You can use this tool in two ways:
   gh-echo https://github.com/user/repo --output results.md
   ```
 
-## Running the tool locally
+## Running the Tool Locally
 
 ### Prerequisites
 
 1. **Python3+**: Ensure `Python3` is installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
 2. **Git**: Ensure Git is installed. You can download it from [git-scm.com](https://git-scm.com/).
+3. **Poetry**: Install Poetry by following the instructions at [poetry.eustace.io](https://python-poetry.org/docs/#installation).
 
 ### Setup Instructions
 
@@ -147,17 +147,23 @@ GITHUB_API_VERSION='2022-11-28'
 
 #### 3. Install Required Dependencies
 
-Install the necessary Python packages using `pipenv`:
+Install the necessary Python packages using Poetry:
 
 ```bash
-pip install pipenv
-pipenv shell
-pipenv install
+poetry install
 ```
 
-This will activate the virtual environment and will also install all the dependencies that aare required.
+This will install all required dependencies and set up a virtual environment.
 
-#### 4. Running the CLI Tool Locally
+#### 4. Activate the Virtual Environment
+
+Activate the Poetry virtual environment with:
+
+```bash
+poetry shell
+```
+
+#### 5. Running the CLI Tool Locally
 
 Once the environment is set up and dependencies are installed, you can run the tool locally.
 
@@ -202,13 +208,13 @@ Once the environment is set up and dependencies are installed, you can run the t
 4. Run the script:
 
    ```bash
-   ./_main.py <GITHUB_REPOSITORY_URL> [OPTIONS]
+   python _main.py <GITHUB_REPOSITORY_URL> [OPTIONS]
    ```
 
    Example:
 
    ```bash
-   ./_main.py https://github.com/user/repo --output results.md
+   python _main.py https://github.com/user/repo --output results.md
    ```
 
 ## Additional Information
