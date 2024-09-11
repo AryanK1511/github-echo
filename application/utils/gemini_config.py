@@ -25,6 +25,7 @@ class Insight(TypedDict):
     description: str
 
 
+# Define the response schema
 class GitHubInsights(TypedDict):
     contribution_trends: List[Insight]
     community_engagement: List[Insight]
@@ -33,6 +34,7 @@ class GitHubInsights(TypedDict):
     repository_popularity: List[Insight]
     branch_protection: List[Insight]
     potential_changes: List[Insight]
+    summary: List[Insight]
 
 
 # Define prompts for each category of insights
@@ -62,7 +64,10 @@ CATEGORY_PROMPTS: dict[str, str] = {
     "potential_changes": """
     Identify areas of the codebase that are most in need of contributions or improvements.
     """,
-}
+    "summary": """
+    Summarize the key insights from each category and provide an overall assessment of the repository's health and potential for growth.
+    """,
+    }
 
 
 def generate_gemini_prompt(repo_data: dict[str, str]) -> str:
