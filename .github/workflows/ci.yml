@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
+  code-lint:
     name: Lint with Ruff
     runs-on: ubuntu-latest
 
@@ -31,10 +31,29 @@ jobs:
       - name: Run Ruff
         run: ruff check .
 
+  dockerfile-lint:
+    name: Dockerfile Lint with Halo Lint
+    runs-on: ubuntu-latest
+    needs: code-lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Docker and Halo Lint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+          python -m pip install --upgrade pip
+          pip install halo-lint
+
+      - name: Run Halo Lint on Dockerfile
+        run: halo-lint Dockerfile
+
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    needs: lint
+    needs: ["code-lint", "dockerfile-lint"]
 
     steps:
       - name: Checkout code
