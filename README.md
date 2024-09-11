@@ -23,34 +23,35 @@
 
 ## Table of Contents
 
-1. [Usage](#usage)
-   - [Installing via PyPi](#installing-via-pypi)
-   - [Running the Tool Locally](#running-the-tool-locally)
-2. [Installing via PyPi](#installing-via-pypi)
-   - [Prerequisites](#prerequisites)
-   - [Setup Instructions](#setup-instructions)
-     - [For macOS/Linux](#for-macoslinux)
-     - [For Windows](#for-windows)
-3. [Running the Tool Locally](#running-the-tool-locally)
-   - [Prerequisites](#prerequisites-1)
-   - [Setup Instructions](#setup-instructions-1)
-     - [1. Clone the Repository](#1-clone-the-repository)
-     - [2. Set Up Environment Variables](#2-set-up-environment-variables)
-     - [3. Install Required Dependencies](#3-install-required-dependencies)
-     - [4. Running the CLI Tool Locally](#5-running-the-cli-tool-locally)
-       - [On Windows](#on-windows)
-       - [On macOS and Linux](#on-macos-and-linux)
-4. [Additional Information](#additional-information)
-   - [Troubleshooting](#troubleshooting)
-5. [Further Usage Instructions](#further-usage-instructions)
-   - [Arguments](#arguments)
-   - [Options](#options)
-6. [More about `github-echo`](#more-about-github-echo)
-   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
-   - [Gemini GenAI Integration](#gemini-genai-integration)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [Author](#author)
+- [Usage](#usage)
+- [Installing via PyPi](#installing-via-pypi)
+  - [Prerequisites](#prerequisites)
+  - [Setup Instructions](#setup-instructions)
+    - [For macOS/Linux](#for-macoslinux)
+    - [For Windows](#for-windows)
+- [Running the Tool Locally](#running-the-tool-locally)
+  - [Prerequisites](#prerequisites-1)
+  - [Setup Instructions](#setup-instructions-1)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Set Up Environment Variables](#2-set-up-environment-variables)
+    - [3. Install Required Dependencies](#3-install-required-dependencies)
+    - [4. Activate the Virtual Environment](#4-activate-the-virtual-environment)
+    - [5. Running the CLI Tool Locally](#5-running-the-cli-tool-locally)
+      - [On Windows](#on-windows)
+      - [On macOS and Linux](#on-macos-and-linux)
+- [Running Using Docker](#running-using-docker)
+  - [On Windows](#on-windows-1)
+  - [On macOS and Linux](#on-macos-and-linux-1)
+- [Troubleshooting](#troubleshooting)
+- [Further Usage Instructions](#further-usage-instructions)
+  - [Arguments](#arguments)
+  - [Options](#options)
+- [More about `github-echo`](#more-about-github-echo)
+  - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
+  - [Gemini GenAI Integration](#gemini-genai-integration)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
 ## Usage
 
@@ -222,7 +223,74 @@ Once the environment is set up and dependencies are installed, you can run the t
 - **For Help**: Run `./_main.py --help` or `python _main.py --help` to see the available options and usage instructions.
 - **For Version**: Use the `--version` or `-v` flag to get the version number.
 
-### Troubleshooting
+## Running Using Docker
+
+> **WARNING:** If you run using Docker, it will deprive you of a lot of features that the command line tool offers. Pretty print becomes unavailable and overall it doesn't look very pretty. It's always recommended to run this tool locally for development purposes.
+
+### Cloning the repo and setting the environment variables
+
+- First, clone the repository to your local machine:
+
+  ```bash
+  git clone https://github.com/AryanK1511/github-echo
+  cd github-echo
+  ```
+
+- Next, navigate to the `Dockerfile` in the root of this repository and fill in the environment variables
+
+```txt
+ENV GOOGLE_GEMINI_API_KEY='Your API Key'
+ENV GITHUB_API_TOKEN='Your API Key'
+ENV GITHUB_API_VERSION='2022-11-28'
+```
+
+- Replace `'Your API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey).
+- Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+- You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
+
+#### On Windows
+
+- **Install Docker:** Download and install Docker Desktop from [Docker’s website](https://docs.docker.com/engine/install/).
+- **Build the Docker Image:** Open Command Prompt or PowerShell, navigate to the project directory, and build the Docker image:
+
+  ```cmd
+  docker build -t gh-echo .
+  ```
+
+- **Run the Docker Container:** Once the image is built, you can run a container with the following command:
+
+  ```cmd
+  docker run --rm gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
+  ```
+
+  Example:
+
+  ```cmd
+  docker run --rm gh-echo https://github.com/user/repo --output results.md
+  ```
+
+#### On macOS and Linux
+
+- **Install Docker:** Follow instructions at [Docker’s website](https://docs.docker.com/engine/install/).
+- **Build the Docker Image:** Open Terminal, navigate to the project directory, and build the Docker image:
+
+  ```bash
+  docker build -t gh-echo .
+  ```
+
+- **Run the Docker Container:** Once the image is built, you can run a container with the following command:
+
+  ```bash
+  docker run --rm gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
+  ```
+
+  Example:
+
+  ```bash
+  docker run --rm gh-echo https://github.com/user/repo --output results.md
+  ```
+
+## Troubleshooting
 
 - **Invalid GitHub URL**: Ensure the URL is correct and follows the format `https://github.com/owner/repo`.
 - **Connection Issues**: Check your internet connection and API tokens.
