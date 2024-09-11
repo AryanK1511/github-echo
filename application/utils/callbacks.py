@@ -13,9 +13,6 @@ from application.core.gemini_model import get_gemini_summary
 from application.core.github_api import fetch_github_data
 from application.utils.parser import parse_github_url
 
-# path_to_pyproject_dir = Path(__file__).parent.parent
-# __version__ = get_version(__name__, path_to_pyproject_dir, default_return=None)
-
 # Console instances for standard and error output
 console = Console()
 err_console = Console(stderr=True)
