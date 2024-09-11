@@ -14,8 +14,8 @@ from application.core.github_api import fetch_github_data
 from application.utils.parser import parse_github_url
 
 # Console instances for standard and error output
-console = Console(soft_wrap=True)
-err_console = Console(stderr=True, soft_wrap=True)
+console = Console()
+err_console = Console(stderr=True)
 
 
 def version_callback(value: bool):
@@ -31,7 +31,11 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
-def process_tasks(github_repository_url: str, output_file: Optional[Path]):
+def process_tasks(
+    github_repository_url: str,
+    output_file: Optional[Path],
+    model_temperature: Optional[float],
+):
     """
     Processes the provided GitHub repository URL and performs tasks to analyze the repository.
 
@@ -45,15 +49,20 @@ def process_tasks(github_repository_url: str, output_file: Optional[Path]):
 
     with Progress(
         TextColumn(
-            "[bold cyan]🔍 [Analyzing repository for insights...]", justify="right"
+            "[bold cyan]🔍 [Analyzing repository for insights...]", justify="left"
         ),
         BarColumn(bar_width=60, pulse_style="bright_magenta"),
         TextColumn(
-            "[bold green][progress.percentage]{task.percentage:>3.0f}%", justify="right"
+            "[bold green][progress.percentage]{task.percentage:>3.0f}%", justify="left"
         ),
         transient=True,
     ) as progress:
-        task = progress.add_task(" Analyzing Repository", total=total_tasks)
+        # Logging the model temperature for the user
+        console.print(
+            f"🤖 [bold cyan][Model Temperature][/bold cyan] [bold yellow]{model_temperature}[/bold yellow] [italic dim](controls the creativity of responses; higher values are more random)[/italic dim]"
+        )
+
+        task = progress.add_task("Analyzing Repository", total=total_tasks)
 
         # Task 01 -> Parse the GitHub URL and extract the owner and repo name
         github_username, github_repository_name = parse_github_url(
@@ -71,7 +80,7 @@ def process_tasks(github_repository_url: str, output_file: Optional[Path]):
         time.sleep(0.3)
 
         # Task 03 -> Generate the Gemini summary
-        repo_summary = get_gemini_summary(repo_data_json)
+        repo_summary = get_gemini_summary(repo_data_json, model_temperature)
         progress.advance(task)
         time.sleep(0.3)
         progress.update(task, completed=total_tasks)

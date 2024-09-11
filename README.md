@@ -7,6 +7,9 @@
   <a href="https://python.org">
     <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" alt="Python Version">
   </a>
+  <a href="https://pypi.org/project/gh-echo/">
+    <img src="https://img.shields.io/pypi/v/gh-echo?color=blue&label=pypi%20package" alt="PyPI Version">
+  </a>
   <a href="https://github.com/AryanK1511/github-echo">
     <img src="https://img.shields.io/github/stars/AryanK1511/github-echo?style=social" alt="GitHub Stars">
   </a>
@@ -310,11 +313,12 @@ _main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
 
 ### Options
 
-| Option      | Shortcut | Type | Description                | Default |
-| ----------- | -------- | ---- | -------------------------- | ------- |
-| `--version` | `-v`     | Flag | Get the version number     |         |
-| `--output`  | `-o`     | PATH | Path to the output file    | None    |
-| `--help`    |          | Flag | Show this message and exit |         |
+| Option          | Shortcut | Type   | Description                                           | Default |
+| --------------- | -------- | ------ | ----------------------------------------------------- | ------- |
+| `--version`     | `-v`     | Flag   | Get the version number                                | `N/A`   |
+| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `1.0`   |
+| `--output`      | `-o`     | PATH   | Path to the output file                               | None    |
+| `--help`        |          | Flag   | Show this message and exit                            | `N/A`   |
 
 ## More about `github-echo`
 

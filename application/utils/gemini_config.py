@@ -40,19 +40,54 @@ GEMINI_PROMPT = (
 "
 )
 
-"""
-    * candidateCount specifies the number of generated responses to return. If unset, this will default to 1.
 
-    * stopSequences specifies the set of character sequences (up to 5) that will stop output generation. If specified, the API will stop at the first appearance of a stop_sequence. The stop sequence won't be included as part of the response.
+def get_gemini_generation_config(
+    candidate_count=1, temperature=1.0, stop_sequences=None, max_output_tokens=None
+):
+    """
+    Creates a GenerationConfig object with specified parameters for generating responses.
 
-    * maxOutputTokens sets the maximum number of tokens to include in a candidate.
+    Parameters:
+        candidate_count (int): The number of responses to generate. Must be an integer greater than or equal to 1. Default is 1.
+        temperature (float): Controls the randomness of the output. Must be a float or integer between 0.0 and 2.0. Default is 1.0.
+        stop_sequences (list of str, optional): A list of up to 5 character sequences that, if encountered, will stop output generation. Default is None, which means no stop sequences are applied. Each sequence must be a string.
+        max_output_tokens (int, optional): The maximum number of tokens to include in a response. Must be an integer greater than or equal to 1. Default is None, which means no limit is applied.
 
-    * temperature controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0].
-"""
+    Returns:
+        genai.types.GenerationConfig: An instance of GenerationConfig with the provided settings.
+    """
 
-GENERATION_CONFIG = (
-    genai.types.GenerationConfig(
-        candidate_count=1,
-        temperature=1.0,
-    ),
-)
+    # Validate candidate_count
+    if not isinstance(candidate_count, int) or candidate_count < 1:
+        raise ValueError(
+            "candidate_count must be an integer greater than or equal to 1."
+        )
+
+    # Validate temperature
+    if not (isinstance(temperature, float) or isinstance(temperature, int)):
+        raise TypeError("temperature must be a float or integer.")
+    if not (0.0 <= temperature <= 2.0):
+        raise ValueError("temperature must be between 0.0 and 2.0.")
+
+    # Validate stop_sequences
+    if stop_sequences is not None:
+        if not isinstance(stop_sequences, list):
+            raise TypeError("stop_sequences must be a list.")
+        if len(stop_sequences) > 5:
+            raise ValueError("stop_sequences list cannot have more than 5 items.")
+        if not all(isinstance(seq, str) for seq in stop_sequences):
+            raise TypeError("All items in stop_sequences must be strings.")
+
+    # Validate max_output_tokens
+    if max_output_tokens is not None:
+        if not isinstance(max_output_tokens, int) or max_output_tokens < 1:
+            raise ValueError(
+                "max_output_tokens must be an integer greater than or equal to 1."
+            )
+
+    return genai.types.GenerationConfig(
+        candidate_count=candidate_count,
+        temperature=temperature,
+        stop_sequences=stop_sequences or [],
+        max_output_tokens=max_output_tokens,
+    )
