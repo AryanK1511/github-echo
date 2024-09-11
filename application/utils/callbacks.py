@@ -1,4 +1,5 @@
 import asyncio
+import importlib.metadata
 import time
 from pathlib import Path
 from typing import Optional
@@ -16,8 +17,6 @@ from application.utils.parser import parse_github_url
 console = Console(soft_wrap=True)
 err_console = Console(stderr=True, soft_wrap=True)
 
-__version__ = "0.0.1"
-
 
 def version_callback(value: bool):
     """
@@ -25,7 +24,9 @@ def version_callback(value: bool):
     Prints the version number and exits the application if the flag is provided.
     """
     if value:
-        print(f"github-echo Version: {__version__}")
+        console.print(
+            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {importlib.metadata.version("gh-echo")}"
+        )
         raise typer.Exit()
 
 

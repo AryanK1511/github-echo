@@ -1,66 +1,92 @@
-# Commands for Distribution
+# Building and Publishing a Package with Poetry
 
-To distribute your package on PyPi, follow these steps.
+## 1. **Prepare Your Project**
 
-## Install Build Tools
+Ensure your `pyproject.toml` file is correctly configured. Here’s a basic example:
 
-First, ensure you have the necessary build and distribution tools installed:
+```toml
+[tool.poetry]
+name = "your-package-name"
+version = "0.1.0"
+description = "A short description of your package."
+authors = ["Your Name <your-email@example.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/yourusername/your-repo"
+repository = "https://github.com/yourusername/your-repo"
+keywords = ["keyword1", "keyword2"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+```
+
+## 2. **Build the Package**
+
+To build your package, use the following command. This will create distribution archives in the `dist/` directory:
 
 ```bash
-python3 -m pip install build
-python3 -m pip install wheel
-python3 -m pip install twine
+poetry build
 ```
 
-## Build the Package
+The `dist/` directory will contain `.tar.gz` and `.whl` files, which are the distribution archives of your package.
 
-Once the tools are installed, you can build your package. This will create source and wheel distributions under the `dist/` directory:
+## 3. **Publish to PyPI**
+
+To publish your package to the official PyPI repository, you need to have an account on [PyPI](https://pypi.org/). You should also have an API token for authentication.
+
+1. **Add PyPI as a Repository** (if not already set):
+
+   ```bash
+   poetry config pypi-token.pypi your-pypi-token
+   ```
+
+   Replace `your-pypi-token` with your actual PyPI API token. You can generate a token from your PyPI account settings.
+
+2. **Publish the Package**:
+
+   ```bash
+   poetry publish --build
+   ```
+
+   This command builds and publishes the package in one step.
+
+### Publishing to TestPyPI
+
+TestPyPI is a separate instance of the Python Package Index used for testing and experimentation. It allows you to test package uploads and installation before publishing to the main PyPI repository.
+
+#### 1. **Create a TestPyPI Account**
+
+Register for an account on [TestPyPI](https://test.pypi.org/). After registering, you’ll receive an API token for publishing.
+
+#### 2. **Configure TestPyPI Repository**
+
+Add TestPyPI as a repository in your Poetry configuration:
 
 ```bash
-python3 -m build
+poetry config repositories.testpypi https://test.pypi.org/legacy/
 ```
 
-This command generates two types of distributions:
-
-- **Source Distribution (sdist)**: A `.tar.gz` file.
-- **Wheel Distribution (bdist_wheel)**: A `.whl` file.
-
-## Configure PyPi Credentials
-
-Next, configure your PyPi credentials by adding a `.pypirc` file to your home directory if it doesn't already exist. Open the file using a text editor:
+Add your TestPyPI token:
 
 ```bash
-vi $HOME/.pypirc
+poetry config pypi-token.testpypi your-testpypi-token
 ```
 
-Add the following content, replacing `pypi-XXX` with your actual PyPi token:
+Replace `your-testpypi-token` with the API token from your TestPyPI account.
 
-```ini
-[pypi]
-  username = __token__
-  password = pypi-XXX
-```
+#### 3. **Build and Publish to TestPyPI**
 
-You can generate a PyPi token by visiting the [PyPi API tokens](https://pypi.org/manage/account/#api-tokens) page.
-
-## Upload the Package
-
-Once your package is built and `.pypirc` is configured, you can upload the distribution files to PyPi:
+To publish to TestPyPI, use the `--repository` option:
 
 ```bash
-python3 -m twine upload dist/*
+poetry publish --build --repository testpypi
 ```
 
-This command will prompt for your username and token if not already set in `.pypirc`.
-
-## Verifying the Upload
-
-After uploading, you can verify that your package is live on [PyPi](https://pypi.org/). Simply search for your package by name, or navigate to your project's URL:
-
-```bash
-https://pypi.org/project/your-package-name/
-```
-
-## Author
-
-[Aryan Khurana](https://www.github.com/AryanK1511)
+This will build your package and publish it to TestPyPI.
