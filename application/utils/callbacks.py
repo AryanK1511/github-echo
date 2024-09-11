@@ -26,7 +26,7 @@ def version_callback(value: bool):
     pyproject = toml.load("pyproject.toml")
     if value:
         console.print(
-            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {pyproject["tool"]["poetry"]["version"]}"
+            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {pyproject['tool']['poetry']['version']}"
         )
         raise typer.Exit()
 
