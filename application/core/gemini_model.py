@@ -1,8 +1,10 @@
-from typing import Dict
+from typing import Dict, Any
 
 import google.generativeai as genai
 
 from _config import GOOGLE_GEMINI_API_KEY
+from application.utils.parser import parse_json_string, json_to_markdown
+
 from application.utils.gemini_config import (
     GEMINI_MODEL,
     GEMINI_SYSTEM_INSTRUCTION,
@@ -23,7 +25,7 @@ model = genai.GenerativeModel(
 )
 
 
-def get_gemini_summary(github_data: Dict[str, any], model_temperature: float) -> str:
+def get_gemini_summary(github_data: Dict[str, Any], model_temperature: float) -> str:
     """
     Generates a summary of the GitHub repository data using the Gemini model.
 
@@ -41,4 +43,8 @@ def get_gemini_summary(github_data: Dict[str, any], model_temperature: float) ->
         f"{generate_gemini_prompt(github_data)}",
         generation_config=get_gemini_generation_config(temperature=model_temperature),
     )
-    return response.text
+
+    parsed_json = parse_json_string(response.text) # Convert md to dict
+    formatted_response = json_to_markdown(parsed_json) # Convert dict to pretty printed md
+
+    return formatted_response
