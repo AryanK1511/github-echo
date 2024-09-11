@@ -4,7 +4,7 @@ FROM python:3.9.20-bullseye@sha256:5591e6eab92348180676f2c1567a402fda5a51d91bf94
 WORKDIR /app
 
 # Poetry is installed globally using pip
-RUN pip install poetry
+RUN pip install --no-cache-dir poetry==1.8.3
 
 # PYTHONDONTWRITEBYTECODE=1: Prevents Python from writing .pyc files (compiled bytecode) to disk
 # PYTHONUNBUFFERED=1: Ensures that the output from stdout and stderr is not buffered, so you see real-time output
