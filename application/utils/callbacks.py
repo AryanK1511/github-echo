@@ -3,15 +3,18 @@ import time
 from pathlib import Path
 from typing import Optional
 
-import toml
 import typer
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.progress import BarColumn, Progress, TextColumn
+from single_source import get_version
 
 from application.core.gemini_model import get_gemini_summary
 from application.core.github_api import fetch_github_data
 from application.utils.parser import parse_github_url
+
+# path_to_pyproject_dir = Path(__file__).parent.parent
+# __version__ = get_version(__name__, path_to_pyproject_dir, default_return=None)
 
 # Console instances for standard and error output
 console = Console()
@@ -23,10 +26,10 @@ def version_callback(value: bool):
     Callback function to handle the `--version` flag.
     Prints the version number and exits the application if the flag is provided.
     """
-    pyproject = toml.load("pyproject.toml")
     if value:
+        __version__ = get_version(__name__, Path(__file__).parent.parent.parent)
         console.print(
-            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {pyproject['tool']['poetry']['version']}"
+            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {__version__}"
         )
         raise typer.Exit()
 
