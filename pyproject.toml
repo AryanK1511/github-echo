@@ -15,7 +15,7 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 packages = [{include = "application"}]
-include = ["_main.py", "_config.py"]
+include = ["_main.py", "_config.py", "pyproject.toml"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -24,6 +24,7 @@ google-generativeai = "^0.8.0"
 python-dotenv = "^1.0.1"
 httpx = "^0.27.2"
 pytest = "^8.3.3"
+toml = "^0.10.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
