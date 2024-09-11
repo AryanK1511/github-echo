@@ -905,6 +905,17 @@ files = [
 ]
 
 [[package]]
+name = "single-source"
+version = "0.4.0"
+description = "Access to the project version in Python code for PEP 621-style projects"
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "single_source-0.4.0-py3-none-any.whl", hash = "sha256:38880b16e6e0ca2e012f85dc3820eb31999ace5f1d9a588395ea38f8bd0775f5"},
+    {file = "single_source-0.4.0.tar.gz", hash = "sha256:7917aa113bda60072f01952e2966cd7247f0ec16fe52a1555f3c066b553e98b4"},
+]
+
+[[package]]
 name = "sniffio"
 version = "1.3.1"
 description = "Sniff out which async library your code is running under"
@@ -1016,4 +1027,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "08bacad933263c0496348945fabb84292a8cdbb6d7fe9d9b98b4d2cddf863842"
+content-hash = "f9e0f54870eebad19658c235071337421b470c03640271068a49bb60200cfeab"
