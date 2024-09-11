@@ -1,9 +1,9 @@
 import asyncio
-import importlib.metadata
 import time
 from pathlib import Path
 from typing import Optional
 
+import toml
 import typer
 from rich.console import Console
 from rich.markdown import Markdown
@@ -23,9 +23,10 @@ def version_callback(value: bool):
     Callback function to handle the `--version` flag.
     Prints the version number and exits the application if the flag is provided.
     """
+    pyproject = toml.load("pyproject.toml")
     if value:
         console.print(
-            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {importlib.metadata.version("gh-echo")}"
+            f"[bold bright_magenta]github-echo version[/bold bright_magenta] {pyproject["tool"]["poetry"]["version"]}"
         )
         raise typer.Exit()
 
