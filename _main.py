@@ -43,7 +43,7 @@ def github_repo_insights(
             "-t",
             help="Sets the temperature for the model, with a range from 0.0 (more deterministic) to 2.0 (more random).",
         ),
-    ] = 1.0,
+    ] = 0.5,
     output_file: Annotated[
         Optional[Path], typer.Option("--output", "-o", help="Path to the output file")
     ] = None,
