@@ -1,16 +1,16 @@
-from typing import Dict, Any
+import json
+from typing import Any, Dict
 
 import google.generativeai as genai
 
 from _config import GOOGLE_GEMINI_API_KEY
-from application.utils.parser import parse_json_string, json_to_markdown
-
 from application.utils.gemini_config import (
     GEMINI_MODEL,
     GEMINI_SYSTEM_INSTRUCTION,
     generate_gemini_prompt,
     get_gemini_generation_config,
 )
+from application.utils.parser import json_to_markdown
 
 # Configure the Gemini GenAI API in order to make requests to it
 try:
@@ -44,7 +44,10 @@ def get_gemini_summary(github_data: Dict[str, Any], model_temperature: float) ->
         generation_config=get_gemini_generation_config(temperature=model_temperature),
     )
 
-    parsed_json = parse_json_string(response.text) # Convert md to dict
-    formatted_response = json_to_markdown(parsed_json) # Convert dict to pretty printed md
+    json_response = json.loads(response.text)
+
+    formatted_response = json_to_markdown(
+        json_response
+    )  # Convert the returned json to markdown
 
     return formatted_response
