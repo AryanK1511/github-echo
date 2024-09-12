@@ -316,7 +316,7 @@ _main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
 | Option          | Shortcut | Type   | Description                                           | Default |
 | --------------- | -------- | ------ | ----------------------------------------------------- | ------- |
 | `--version`     | `-v`     | Flag   | Get the version number                                | `N/A`   |
-| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `1.0`   |
+| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `0.5`   |
 | `--output`      | `-o`     | PATH   | Path to the output file                               | None    |
 | `--help`        |          | Flag   | Show this message and exit                            | `N/A`   |
 
