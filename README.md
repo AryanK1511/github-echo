@@ -22,6 +22,9 @@
   <a href="https://github.com/AryanK1511/github-echo/issues">
     <img src="https://img.shields.io/github/issues/AryanK1511/github-echo" alt="GitHub Issues">
   </a>
+  <a href="https://youtu.be/bTbETpn7C9I">
+    <img src="https://img.shields.io/badge/Watch-Demo-red?logo=youtube" alt="Watch Demo">
+  </a>
 </p>
 
 ## Table of Contents
