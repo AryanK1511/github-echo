@@ -1,93 +1,161 @@
-# This file cotains parameters that are used to configure gemini to our use case
+from typing import Dict
+
 import google.generativeai as genai
 
-"""
-* gemini-1.0-flash -> Ideal for text inputs
-* Natural language tasks, multi-turn text and code chat, and code generation
-* Available gemini models: https://ai.google.dev/gemini-api/docs/models/gemini
-"""
-
+# Define the model and system instruction
 GEMINI_MODEL = "gemini-1.5-flash"
 
-GEMINI_SYSTEM_INSTRUCTION = (
-    " You are a software developer wanting to contribute to open source. \
-    You have been tasked with analyzing a GitHub repository to provide insights on its development trends, community engagement, release cadence, code base composition, repository popularity, and branch protection rules.\
-    Your task is to generate a summary based on the GitHub Repository data given. What would you want to know as a contributor.\
-    "
-)
+GEMINI_SYSTEM_INSTRUCTION = """
+You are a software developer analyzing a GitHub repository. Your task is to provide actionable insights into various aspects of the repository including development trends, community engagement, release cadence, code base composition, repository popularity, branch protection rules, and potential improvements. What key information would you need to provide useful insights?
+"""
 
-GEMINI_PROMPT = (
-    "Given the GitHub repository data, provide an in-depth analysis with the following insights:\
-    Contribution Trends:\
-        - Analyze the commit frequency and identify any significant trends or patterns in repository development.\
-        - Assess contributor activity trends and correlate them with any major repository events or changes.\
-        - Mention what kind of changes or features are the contributors working on right now.\
-    Community Engagement:\
-        - Evaluate the average time taken to resolve issues and merge pull requests. Compare these metrics with overall repository activity.\
-        - Determine the impact of individual contributors on issue resolution and code changes.\
-    Release Cadence:\
-        - Examine the frequency and timing of releases. Identify any patterns in release cycles or versioning practices.\
-    Code Base Composition:\
-        - Provide insights into language usage trends and their evolution over time.\
-        - Assess the health and stability of dependencies, noting any potential security concerns.\
-    Repository Popularity:\
-        - Analyze repository traffic data and correlate it with stars, forks, and watchers to gauge growth in popularity.\
-    Branch Protection:\
-        - Evaluate the branch protection rules in place and their implications for code quality and collaboration.\
-    Potential Changed that a contributor can make:\
-        - Identify areas of the codebase that are most in need of contributions or improvements.\
-    Generate a summary that highlights key trends, anomalies, and actionable insights. Generate it in Markdown and proper formatting so that its easier to read. Make it concise but be sure to have quantifiable numbers.\
-"
-)
+# Define prompts for each category of insights
+CATEGORY_PROMPTS: Dict[str, str] = {
+    "contribution_trends": """
+    Analyze the commit frequency and identify significant trends or patterns in development. Assess contributor activity and correlate it with major repository events.
+    """,
+    "community_engagement": """
+    Evaluate average issue resolution times and pull request merges. Determine the impact of contributors on these metrics.
+    """,
+    "release_cadence": """
+    Examine release frequency and timing. Identify patterns in release cycles or versioning.
+    """,
+    "code_base_composition": """
+    Provide insights into language usage trends and dependency health. Note any potential security concerns.
+    """,
+    "repository_popularity": """
+    Analyze repository traffic and correlate with stars, forks, and watchers to gauge popularity.
+    """,
+    "branch_protection": """
+    Evaluate the current branch protection rules. Identify areas where protection is missing or could be improved. Suggest implementing rules like requiring code reviews, testing, and approvals before merging changes.
+    """,
+    "potential_changes": """
+    Identify areas of the codebase needing contributions or improvements.
+    """,
+    "summary": """
+    Summarize key insights from each category and provide an overall assessment of the repository's health and growth potential.
+    """,
+}
+
+
+def generate_gemini_prompt(repo_data: Dict[str, str]) -> str:
+    """
+    Generates a prompt for the Gemini model based on the provided GitHub repository data.
+
+    Parameters:
+        repo_data (dict): A dictionary containing GitHub repository data.
+
+    Returns:
+        str: A prompt string formatted for the Gemini model.
+    """
+    return f"""
+    Analyze the following GitHub repository data and provide structured insights:
+
+        {repo_data}
+
+    For each category, provide a list of key insights with the following requirements:
+    - Each insight should include a title and a concise description.
+    - Avoid duplication of insights.
+    - Ensure each description is data-driven and actionable, including quantifiable numbers where applicable.
+
+    **Categories and Prompts:**
+
+    {CATEGORY_PROMPTS}
+
+    Format your response as a JSON object with the following structure:
+    '''json
+    {{
+      "branch_protection": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "code_base_composition": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "community_engagement": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "contribution_trends": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "potential_changes": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "release_cadence": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "repository_popularity": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ],
+      "summary": [
+        {{
+          "title": "string",
+          "description": "string"
+        }}
+      ]
+    }}
+    '''
+    """
 
 
 def get_gemini_generation_config(
-    candidate_count=1, temperature=1.0, stop_sequences=None, max_output_tokens=None
+    candidate_count=1, temperature=0.5, stop_sequences=None, max_output_tokens=None
 ):
     """
     Creates a GenerationConfig object with specified parameters for generating responses.
 
     Parameters:
-        candidate_count (int): The number of responses to generate. Must be an integer greater than or equal to 1. Default is 1.
-        temperature (float): Controls the randomness of the output. Must be a float or integer between 0.0 and 2.0. Default is 1.0.
-        stop_sequences (list of str, optional): A list of up to 5 character sequences that, if encountered, will stop output generation. Default is None, which means no stop sequences are applied. Each sequence must be a string.
-        max_output_tokens (int, optional): The maximum number of tokens to include in a response. Must be an integer greater than or equal to 1. Default is None, which means no limit is applied.
+        candidate_count (int): Number of responses to generate (integer ≥ 1). Default is 1.
+        temperature (float): Controls randomness of output (0.0 to 2.0). Default is 0.5.
+        stop_sequences (list of str, optional): Up to 5 sequences to stop generation. Default is None.
+        max_output_tokens (int, optional): Maximum number of tokens in a response (integer ≥ 1). Default is None.
 
     Returns:
         genai.types.GenerationConfig: An instance of GenerationConfig with the provided settings.
     """
-
-    # Validate candidate_count
     if not isinstance(candidate_count, int) or candidate_count < 1:
-        raise ValueError(
-            "candidate_count must be an integer greater than or equal to 1."
-        )
+        raise ValueError("candidate_count must be an integer ≥ 1.")
 
-    # Validate temperature
-    if not (isinstance(temperature, float) or isinstance(temperature, int)):
-        raise TypeError("temperature must be a float or integer.")
-    if not (0.0 <= temperature <= 2.0):
-        raise ValueError("temperature must be between 0.0 and 2.0.")
+    if not isinstance(temperature, (float, int)) or not (0.0 <= temperature <= 1.0):
+        raise ValueError("temperature must be between 0.0 and 1.0.")
 
-    # Validate stop_sequences
     if stop_sequences is not None:
-        if not isinstance(stop_sequences, list):
-            raise TypeError("stop_sequences must be a list.")
-        if len(stop_sequences) > 5:
-            raise ValueError("stop_sequences list cannot have more than 5 items.")
-        if not all(isinstance(seq, str) for seq in stop_sequences):
-            raise TypeError("All items in stop_sequences must be strings.")
+        if (
+            not isinstance(stop_sequences, list)
+            or len(stop_sequences) > 5
+            or not all(isinstance(seq, str) for seq in stop_sequences)
+        ):
+            raise ValueError("stop_sequences must be a list of up to 5 strings.")
 
-    # Validate max_output_tokens
-    if max_output_tokens is not None:
-        if not isinstance(max_output_tokens, int) or max_output_tokens < 1:
-            raise ValueError(
-                "max_output_tokens must be an integer greater than or equal to 1."
-            )
+    if max_output_tokens is not None and (
+        not isinstance(max_output_tokens, int) or max_output_tokens < 1
+    ):
+        raise ValueError("max_output_tokens must be an integer ≥ 1.")
 
     return genai.types.GenerationConfig(
         candidate_count=candidate_count,
         temperature=temperature,
         stop_sequences=stop_sequences or [],
         max_output_tokens=max_output_tokens,
+        response_mime_type="application/json",
     )
