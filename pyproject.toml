@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gh-echo"
-version = "0.1.1"
+version = "0.2.0"
 description = "A command-line tool built to obtain in-depth, actionable information about GitHub repositories."
 authors = ["Aryan Khurana <aryankhurana1511@gmail.com>"]
 license = "MIT"
