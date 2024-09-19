@@ -47,6 +47,9 @@ def github_repo_insights(
     output_file: Annotated[
         Optional[Path], typer.Option("--output", "-o", help="Path to the output file")
     ] = None,
+    token_usage: Annotated[
+        bool, typer.Option("--token-usage", help="Flag for printing token usage")
+    ] = False,
 ):
     """
     Main function to analyze a GitHub repository and optionally output the results to a file.
@@ -61,6 +64,7 @@ def github_repo_insights(
             github_repository_url=github_repository_url,
             output_file=output_file,
             model_temperature=model_temperature,
+            token_usage=token_usage
         )
     except Exception as e:
         err_console.print("\n[bold red]🚨 Something went wrong![/bold red]\n")
