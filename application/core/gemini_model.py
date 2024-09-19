@@ -4,12 +4,10 @@ from typing import Any, Dict
 import google.generativeai as genai
 
 from _config import GOOGLE_GEMINI_API_KEY
-from application.utils.gemini_config import (
-    GEMINI_MODEL,
-    GEMINI_SYSTEM_INSTRUCTION,
-    generate_gemini_prompt,
-    get_gemini_generation_config,
-)
+from application.utils.gemini_config import (GEMINI_MODEL,
+                                             GEMINI_SYSTEM_INSTRUCTION,
+                                             generate_gemini_prompt,
+                                             get_gemini_generation_config)
 from application.utils.parser import json_to_markdown
 
 # Configure the Gemini GenAI API in order to make requests to it
@@ -25,7 +23,7 @@ model = genai.GenerativeModel(
 )
 
 
-def get_gemini_summary(github_data: Dict[str, Any], model_temperature: float) -> str:
+def get_gemini_summary(github_data: Dict[str, Any], model_temperature: float) -> Dict[str, str]:
     """
     Generates a summary of the GitHub repository data using the Gemini model.
 
@@ -50,4 +48,4 @@ def get_gemini_summary(github_data: Dict[str, Any], model_temperature: float) ->
         json_response
     )  # Convert the returned json to markdown
 
-    return formatted_response
+    return {'formatted_response': formatted_response, 'usage': response.usage_metadata}

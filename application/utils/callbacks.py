@@ -35,6 +35,7 @@ def process_tasks(
     github_repository_url: str,
     output_file: Optional[Path],
     model_temperature: Optional[float],
+    token_usage: Optional[bool],
 ):
     """
     Processes the provided GitHub repository URL and performs tasks to analyze the repository.
@@ -80,7 +81,9 @@ def process_tasks(
         time.sleep(0.3)
 
         # Task 03 -> Generate the Gemini summary
-        repo_summary = get_gemini_summary(repo_data_json, model_temperature)
+        response = get_gemini_summary(repo_data_json, model_temperature)
+        usage = response['usage']
+        repo_summary = response['formatted_response']
         progress.advance(task)
         time.sleep(0.3)
         progress.update(task, completed=total_tasks)
@@ -103,3 +106,16 @@ def process_tasks(
             console.print(f"\n\n{completion_message}")
             md = Markdown(repo_summary)
             console.print(md)
+        
+        # If token_usage argument is specified, print the usage
+        if token_usage:
+            formatted_usage=("\n\033[92m"
+                "Token Usage:\n"
+                "-------------\n"
+                f"- Completion Tokens: {usage.candidates_token_count}\n"
+                f"- Prompt Tokens: {usage.prompt_token_count}\n"
+                f"- Total Tokens: {usage.total_token_count}\n"
+                "\033[0m")
+            err_console.print(f"\n[green]{formatted_usage}[/green]\n")
+        
+
