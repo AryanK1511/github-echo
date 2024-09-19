@@ -14,4 +14,4 @@ def test_version(run_command: callable) -> None:
     result: subprocess.CompletedProcess = run_command("-v")
 
     assert result.returncode == 0
-    assert "github-echo version 0.1.1" in result.stdout
+    assert "github-echo version 0.2.0" in result.stdout
