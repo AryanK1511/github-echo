@@ -52,6 +52,7 @@
 - [Further Usage Instructions](#further-usage-instructions)
   - [Arguments](#arguments)
   - [Options](#options)
+  - [Status Codes](#status-codes)
 - [More about `github-echo`](#more-about-github-echo)
   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
   - [Gemini GenAI Integration](#gemini-genai-integration)
@@ -324,6 +325,23 @@ _main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
 | `--output`      | `-o`     | PATH   | Path to the output file                                                                                       | None     |
 | `--help`        |          | Flag   | Show this message and exit                                                                                    | `N/A`    |
 | `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`                                                                 | `N/A`    |
+
+### Status Codes
+
+When executing the command, the tool returns the following status codes to indicate the outcome of the operation:
+
+- **Status Code 0**: **Success**
+
+  - This status code indicates that the operation completed successfully without any errors. All results are processed as expected.
+
+- **Status Code 1**: **Error**
+
+  - This status code indicates that an error occurred during the execution of the command. An appropriate error message will be displayed to the user, detailing what went wrong. Common reasons for receiving this status code include:
+    - Invalid GitHub repository URL.
+    - Network connectivity issues.
+    - Problems with data retrieval or processing.
+    - Missing API Keys.
+    - Something wrong on the server side with any of the AI providers used.
 
 ## More about `github-echo`
 

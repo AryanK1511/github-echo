@@ -80,14 +80,17 @@ def github_repo_insights(
             )
         )
     except Exception as e:
-        err_console.print("[bold red]🚨 Something went wrong![/bold red]\n")
-        err_console.print(f"[red]💡 [bold]Error:[/bold] {e}\n", highlight=True)
+        # This is the central exception handler, all exceptions thrown throughout the program will be caught here
+        err_console.print(f"\n[red]🚨 [bold]Something went wrong[/bold] 🚨 {e}\n")
+        err_console.print(f"[red]{e}[/red]\n")
         err_console.print(
             "[bold yellow]Tip:[/bold yellow] Use [bold bright_magenta]github-echo --help[/bold bright_magenta] to get usage information.\n"
         )
         err_console.print(
             "[bold green]For more help, please refer to the project README File.\n"
         )
+
+        # Exit with status code 1
         raise typer.Exit(code=1)
 
 
