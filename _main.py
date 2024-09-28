@@ -42,7 +42,7 @@ def github_repo_insights(
         typer.Option(
             "--model",
             "-m",
-            help="Choose the LLM that you want to be used to generate insights",
+            help="Choose the LLM that you want to be used to generate insights. Can be 'gemini' or 'groq'.",
         ),
     ] = "gemini",
     model_temperature: Annotated[

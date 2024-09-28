@@ -4,7 +4,7 @@ import google.generativeai as genai
 
 # Define the models and system instruction
 GEMINI_MODEL = "gemini-1.5-flash"
-GROQ_MODEL = "llama-guard-3-8b"
+GROQ_MODEL = "mixtral-8x7b-32768"
 
 SYSTEM_INSTRUCTION = """
 You are a software developer analyzing a GitHub repository. Your task is to provide actionable insights into various aspects of the repository including development trends, community engagement, release cadence, code base composition, repository popularity, branch protection rules, and potential improvements. What key information would you need to provide useful insights?
