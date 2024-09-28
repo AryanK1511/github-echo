@@ -11,8 +11,14 @@ from application.utils.model_config import (
 )
 from application.utils.parser import json_to_markdown
 
+GROQ_API_KEY = GROQ_API_KEY if GROQ_API_KEY else ""
+
 # Initialize the Groq client
-client = Groq(api_key=GROQ_API_KEY)
+client = None
+try:
+    client = Groq(api_key=GROQ_API_KEY)
+except Exception as e:
+    raise RuntimeError(f"Failed to configure the Groq GenAI API: {str(e)}")
 
 
 def get_groq_summary(repo_data: Dict[str, Any], temperature: float) -> Dict[str, Any]:
