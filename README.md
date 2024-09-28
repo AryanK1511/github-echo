@@ -55,7 +55,7 @@
   - [Status Codes](#status-codes)
 - [More about `github-echo`](#more-about-github-echo)
   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
-  - [Gemini GenAI Integration](#gemini-genai-integration)
+  - [GenAI Integration](#genai-integration)
 - [Contributing](#contributing)
 - [License](#license)
 - [Author](#author)
@@ -91,10 +91,16 @@ You can use this tool in two ways:
 - Add the environment variables to your shell configuration file (e.g., `.bashrc`, `.zshrc`, etc.)
 
   ```bash
-  export GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key'
+  export GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Gemini
+  export GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
   export GITHUB_API_TOKEN='Your GitHub API Token'
   export GITHUB_API_VERSION='2022-11-28'
   ```
+
+  - Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
+  - Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
+  - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+  - You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
 
 - Run `source ~/.bashrc` (or `source ~/.zshrc` for Zsh) to apply the changes.
 
@@ -104,10 +110,16 @@ You can use this tool in two ways:
 - Set the environment variables:
 
   ```powershell
-  [System.Environment]::SetEnvironmentVariable('GOOGLE_GEMINI_API_KEY', 'Your Google Gemini API Key', 'User')
+  [System.Environment]::SetEnvironmentVariable('GOOGLE_GEMINI_API_KEY', 'Your Google Gemini API Key', 'User') # If you are using Gemini
+  [System.Environment]::SetEnvironmentVariable('GROQ_API_KEY', 'Your Groq API Key', 'User') # If you are using Groq's API
   [System.Environment]::SetEnvironmentVariable('GITHUB_API_TOKEN', 'Your GitHub API Token', 'User')
   [System.Environment]::SetEnvironmentVariable('GITHUB_API_VERSION', '2022-11-28', 'User')
   ```
+
+  - Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
+  - Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
+  - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+  - You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
 
 - Now you can run the CLI tool from anywhere in your terminal:
 
@@ -144,14 +156,17 @@ cd github-echo
 
 For running the tool locally, create a `.env` file in the root of the repository and add the following content:
 
-```text
-GOOGLE_GEMINI_API_KEY='Your API Key'
+```bash
+GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Google Gemini
+GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
 GITHUB_API_TOKEN='Your API Token'
 GITHUB_API_VERSION='2022-11-28'
 ```
 
-- Replace `'Your API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey).
+- Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
+- Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
 - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+- You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
 
 #### 3. Install Required Dependencies
 
@@ -246,12 +261,14 @@ Once the environment is set up and dependencies are installed, you can run the t
 - Next, navigate to the `Dockerfile` in the root of this repository and fill in the environment variables
 
 ```txt
-ENV GOOGLE_GEMINI_API_KEY='Your API Key'
+ENV GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Google Gemini
+ENV GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
 ENV GITHUB_API_TOKEN='Your API Key'
 ENV GITHUB_API_VERSION='2022-11-28'
 ```
 
-- Replace `'Your API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey).
+- Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
+- Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
 - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 - You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
 
@@ -317,14 +334,13 @@ _main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
 
 ### Options
 
-| Option          | Shortcut | Type   | Description                                                                                                   | Default  |
-| --------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------- | -------- |
-| `--version`     | `-v`     | Flag   | Get the version number                                                                                        | `N/A`    |
-| `--model`       | `-m`     | Flag   | Allows user to choose the LLM that you want to be used to generate insights. This could be `gemini` or `groq` | `gemini` |
-| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness                                                         | `0.5`    |
-| `--output`      | `-o`     | PATH   | Path to the output file                                                                                       | None     |
-| `--help`        |          | Flag   | Show this message and exit                                                                                    | `N/A`    |
-| `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`                                                                 | `N/A`    |
+| Option          | Shortcut | Type   | Description                                           | Default |
+| --------------- | -------- | ------ | ----------------------------------------------------- | ------- |
+| `--version`     | `-v`     | Flag   | Get the version number                                | `N/A`   |
+| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `0.5`   |
+| `--output`      | `-o`     | PATH   | Path to the output file                               | None    |
+| `--help`        |          | Flag   | Show this message and exit                            | `N/A`   |
+| `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`         | `N/A`   |
 
 ### Status Codes
 
@@ -355,9 +371,9 @@ The tool fetches the following key information about GitHub repositories:
 - **Labels**: Labels associated with issues and pull requests.
 - **Activity Data**: Data related to repository activity, such as commit history and contributions.
 
-### Gemini GenAI Integration
+### GenAI Integration
 
-**Repo Insights** uses Gemini GenAI to analyze the fetched repository data. Gemini GenAI provides advanced capabilities for:
+**Repo Insights** uses GenAI to analyze the fetched repository data. This provides advanced capabilities for:
 
 - **Summary Generation**: Creating comprehensive summaries based on the repository data.
 - **Insight Extraction**: Identifying key patterns and insights that are not immediately obvious from raw data.
@@ -366,7 +382,7 @@ The tool fetches the following key information about GitHub repositories:
 
 1. **Data Fetching**: The tool queries GitHub's API to gather repository data.
 2. **Data Processing**: The fetched data is processed and formatted.
-3. **AI Analysis**: The processed data is sent to Gemini GenAI, which analyzes it and generates a detailed summary.
+3. **AI Analysis**: The processed data is sent to an LLM, which analyzes it and generates a detailed summary.
 4. **Summary Output**: The summary is either displayed in the terminal or saved to a specified file.
 
 ## Contributing
