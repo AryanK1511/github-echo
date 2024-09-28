@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import asyncio
 from pathlib import Path
 from typing import Optional
 
@@ -36,6 +37,14 @@ def github_repo_insights(
             callback=version_callback,
         ),
     ] = None,
+    model: Annotated[
+        Optional[str],
+        typer.Option(
+            "--model",
+            "-m",
+            help="Choose the LLM that you want to be used to generate insights",
+        ),
+    ] = "gemini",
     model_temperature: Annotated[
         Optional[float],
         typer.Option(
@@ -59,15 +68,19 @@ def github_repo_insights(
         version (Optional[bool]): Optional. If provided, prints the version number and exits the application.
         output_file (Optional[Path]): Optional. If provided, the path to a file where the Markdown summary will be saved.
     """
+
     try:
-        process_tasks(
-            github_repository_url=github_repository_url,
-            output_file=output_file,
-            model_temperature=model_temperature,
-            token_usage=token_usage,
+        asyncio.run(
+            process_tasks(
+                github_repository_url=github_repository_url,
+                model=model,
+                model_temperature=model_temperature,
+                output_file=output_file,
+                token_usage=token_usage,
+            )
         )
     except Exception as e:
-        err_console.print("\n[bold red]🚨 Something went wrong![/bold red]\n")
+        err_console.print("[bold red]🚨 Something went wrong![/bold red]\n")
         err_console.print(f"[red]💡 [bold]Error:[/bold] {e}\n", highlight=True)
         err_console.print(
             "[bold yellow]Tip:[/bold yellow] Use [bold bright_magenta]github-echo --help[/bold bright_magenta] to get usage information.\n"
@@ -78,5 +91,6 @@ def github_repo_insights(
         raise typer.Exit(code=1)
 
 
+# Run the app
 if __name__ == "__main__":
     app()

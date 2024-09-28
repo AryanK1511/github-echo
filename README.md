@@ -316,13 +316,14 @@ _main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
 
 ### Options
 
-| Option          | Shortcut | Type   | Description                                           | Default |
-| --------------- | -------- | ------ | ----------------------------------------------------- | ------- |
-| `--version`     | `-v`     | Flag   | Get the version number                                | `N/A`   |
-| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `0.5`   |
-| `--output`      | `-o`     | PATH   | Path to the output file                               | None    |
-| `--help`        |          | Flag   | Show this message and exit                            | `N/A`   |
-| `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`         | `N/A`   |
+| Option          | Shortcut | Type   | Description                                                                                                   | Default  |
+| --------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------- | -------- |
+| `--version`     | `-v`     | Flag   | Get the version number                                                                                        | `N/A`    |
+| `--model`       | `-m`     | Flag   | Allows user to choose the LLM that you want to be used to generate insights. This could be `gemini` or `groq` | `gemini` |
+| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness                                                         | `0.5`    |
+| `--output`      | `-o`     | PATH   | Path to the output file                                                                                       | None     |
+| `--help`        |          | Flag   | Show this message and exit                                                                                    | `N/A`    |
+| `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`                                                                 | `N/A`    |
 
 ## More about `github-echo`
 

@@ -16,16 +16,11 @@ if os.path.exists(dotenv_path):
 
 # Load environment variables
 GOOGLE_GEMINI_API_KEY = os.getenv("GOOGLE_GEMINI_API_KEY")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GITHUB_API_TOKEN = os.getenv("GITHUB_API_TOKEN")
 GITHUB_API_VERSION = os.getenv("GITHUB_API_VERSION")
 
 # Print a warning if required environment variables are missing
-if not GOOGLE_GEMINI_API_KEY:
-    err_console.print(
-        ":warning: [bold yellow]Warning:[/] GOOGLE_GEMINI_API_KEY not found!",
-        style="bold red",
-    )
-
 if not GITHUB_API_TOKEN:
     err_console.print(
         ":warning: [bold yellow]Warning:[/] GITHUB_API_TOKEN not found.",

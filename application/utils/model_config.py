@@ -2,10 +2,11 @@ from typing import Dict
 
 import google.generativeai as genai
 
-# Define the model and system instruction
+# Define the models and system instruction
 GEMINI_MODEL = "gemini-1.5-flash"
+GROQ_MODEL = "llama-guard-3-8b"
 
-GEMINI_SYSTEM_INSTRUCTION = """
+SYSTEM_INSTRUCTION = """
 You are a software developer analyzing a GitHub repository. Your task is to provide actionable insights into various aspects of the repository including development trends, community engagement, release cadence, code base composition, repository popularity, branch protection rules, and potential improvements. What key information would you need to provide useful insights?
 """
 
@@ -38,7 +39,7 @@ CATEGORY_PROMPTS: Dict[str, str] = {
 }
 
 
-def generate_gemini_prompt(repo_data: Dict[str, str]) -> str:
+def generate_prompt(repo_data: Dict[str, str]) -> str:
     """
     Generates a prompt for the Gemini model based on the provided GitHub repository data.
 
@@ -133,11 +134,6 @@ def get_gemini_generation_config(
     Returns:
         genai.types.GenerationConfig: An instance of GenerationConfig with the provided settings.
     """
-    if not isinstance(candidate_count, int) or candidate_count < 1:
-        raise ValueError("candidate_count must be an integer ≥ 1.")
-
-    if not isinstance(temperature, (float, int)) or not (0.0 <= temperature <= 1.0):
-        raise ValueError("temperature must be between 0.0 and 1.0.")
 
     if stop_sequences is not None:
         if (
