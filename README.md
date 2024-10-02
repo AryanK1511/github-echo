@@ -3,6 +3,7 @@
   <strong>A command-line tool built to obtain in-depth, actionable information about GitHub repositories that is often challenging to decipher manually</strong><br /><br />
 </p>
 
+
 <p align="center">
   <a href="https://python.org">
     <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" alt="Python Version">
