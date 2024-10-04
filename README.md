@@ -53,6 +53,7 @@
   - [Arguments](#arguments)
   - [Options](#options)
   - [Status Codes](#status-codes)
+  - [TOML File Configuration](#toml-file-Configuration)
 - [More about `github-echo`](#more-about-github-echo)
   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
   - [GenAI Integration](#genai-integration)
@@ -358,6 +359,50 @@ When executing the command, the tool returns the following status codes to indic
     - Problems with data retrieval or processing.
     - Missing API Keys.
     - Something wrong on the server side with any of the AI providers used.
+
+### TOML File Configuration
+
+`github-echo` supports a **TOML configuration file** that allows you to set default options for the tool, which are loaded from a `.github-echo-config.toml` file in your home directory. This feature simplifies repeated use by enabling persistent configurations without needing to specify them via command-line arguments every time.
+
+### How It Works
+
+1. The tool will automatically look for a `.github-echo-config.toml` file in your home directory.
+2. If the file is present, the tool will use the values specified there as default configurations.
+3. Command-line arguments always **override** any values specified in the TOML file, allowing for temporary changes as needed.
+
+### Creating the `.github-echo-config.toml` File
+
+To use this feature, create a `.github-echo-config.toml` file in your home directory with the following structure:
+
+```toml
+# Example .github-echo-config.toml
+
+# GitHub repository URL to analyze
+github_repository_url = "https://github.com/username/repository"
+
+# Select the model to use, either "gemini" or "groq"
+model = "gemini"
+
+# Model temperature setting, ranging from 0.0 (deterministic) to 2.0 (random)
+model_temperature = 0.5
+
+# Path to the output file for storing results
+output_file = "/path/to/output/results.md"
+
+# Flag to enable or disable token usage reporting
+token_usage = true
+```
+
+### Using the Configuration File
+
+- **Step 1**: Create the `.github-echo-config.toml` file in your home directory.
+  - On Linux/macOS: `~/`
+  - On Windows: `C:\Users\YourUsername\`
+- **Step 2**: Populate the file with your preferred default values.
+
+**Example File Path:**
+- Linux/macOS: `/home/username/.github-echo-config.toml`
+- Windows: `C:\Users\YourUsername\.github-echo-config.toml`
 
 ## More about `github-echo`
 
