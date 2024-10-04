@@ -11,7 +11,6 @@ from typing_extensions import Annotated
 from application.utils.callbacks import process_tasks, version_callback
 from application.utils.parser import load_toml_config
 
-
 # Console instances for standard and error output
 console = Console(soft_wrap=True)
 err_console = Console(stderr=True, soft_wrap=True)
@@ -70,10 +69,15 @@ def github_repo_insights(
         version (Optional[bool]): Optional. If provided, prints the version number and exits the application.
         output_file (Optional[Path]): Optional. If provided, the path to a file where the Markdown summary will be saved.
     """
-    
 
     # Load the TOML config from home directory
     config = load_toml_config(".github-echo-config.toml")
+
+    if not config:
+        err_console.print(
+            ":warning: [bold yellow]Warning:[/] configuration file not found. Using default values.",
+            style="bold yellow",
+        )
 
     if model == "gemini" and "model" in config:
         model = config["model"]

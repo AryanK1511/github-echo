@@ -53,7 +53,7 @@
   - [Arguments](#arguments)
   - [Options](#options)
   - [Status Codes](#status-codes)
-  - [TOML File Configuration](#toml-file-Configuration)
+  - [TOML File Configuration](#toml-file-configuration)
 - [More about `github-echo`](#more-about-github-echo)
   - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
   - [GenAI Integration](#genai-integration)
@@ -401,6 +401,7 @@ token_usage = true
 - **Step 2**: Populate the file with your preferred default values.
 
 **Example File Path:**
+
 - Linux/macOS: `/home/username/.github-echo-config.toml`
 - Windows: `C:\Users\YourUsername\.github-echo-config.toml`
 
