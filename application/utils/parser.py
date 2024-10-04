@@ -2,8 +2,6 @@ import toml
 from pathlib import Path
 from typing import Dict
 
-import toml
-
 
 def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
     """
