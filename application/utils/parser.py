@@ -1,7 +1,9 @@
-# F.Khan Edited: 03-10-2024 
 import toml
 from pathlib import Path
 from typing import Dict
+
+import toml
+
 
 def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
     """
@@ -22,12 +24,11 @@ def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
 
     try:
         # Trying to open and parse the TOML file
-        with open(config_path, 'r') as config_file:
+        with open(config_path, "r") as config_file:
             return toml.load(config_file)
     except toml.TomlDecodeError as e:
         # If parsing the file fails, raise an error
         raise RuntimeError(f"Failed to load or parse the config file: {str(e)}")
-
 
 
 def parse_github_url(github_repository_url: str) -> tuple[str, str]:
