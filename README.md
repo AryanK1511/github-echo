@@ -364,13 +364,13 @@ When executing the command, the tool returns the following status codes to indic
 
 `github-echo` supports a **TOML configuration file** that allows you to set default options for the tool, which are loaded from a `.github-echo-config.toml` file in your home directory. This feature simplifies repeated use by enabling persistent configurations without needing to specify them via command-line arguments every time.
 
-### How It Works
+#### How It Works
 
 1. The tool will automatically look for a `.github-echo-config.toml` file in your home directory.
 2. If the file is present, the tool will use the values specified there as default configurations.
 3. Command-line arguments always **override** any values specified in the TOML file, allowing for temporary changes as needed.
 
-### Creating the `.github-echo-config.toml` File
+#### Creating the `.github-echo-config.toml` File
 
 To use this feature, create a `.github-echo-config.toml` file in your home directory with the following structure:
 
@@ -393,7 +393,7 @@ output_file = "/path/to/output/results.md"
 token_usage = true
 ```
 
-### Using the Configuration File
+#### Using the Configuration File
 
 - **Step 1**: Create the `.github-echo-config.toml` file in your home directory.
   - On Linux/macOS: `~/`
