@@ -9,6 +9,8 @@ from rich.console import Console
 from typing_extensions import Annotated
 
 from application.utils.callbacks import process_tasks, version_callback
+from application.utils.parser import load_toml_config
+
 
 # Console instances for standard and error output
 console = Console(soft_wrap=True)
@@ -68,6 +70,22 @@ def github_repo_insights(
         version (Optional[bool]): Optional. If provided, prints the version number and exits the application.
         output_file (Optional[Path]): Optional. If provided, the path to a file where the Markdown summary will be saved.
     """
+    
+
+    # Load the TOML config from home directory
+    config = load_toml_config(".github-echo-config.toml")
+
+    if model == "gemini" and "model" in config:
+        model = config["model"]
+
+    if model_temperature == 0.5 and "model_temperature" in config:
+        model_temperature = config["model_temperature"]
+
+    if not output_file and "output_file" in config:
+        output_file = Path(config["output_file"])
+
+    if not token_usage and "token_usage" in config:
+        token_usage = config["token_usage"]
 
     try:
         asyncio.run(

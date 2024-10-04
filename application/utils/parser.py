@@ -1,3 +1,36 @@
+# F.Khan Edited: 03-10-2024 
+import os
+import toml
+from pathlib import Path
+from typing import Dict
+
+def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
+    """
+    Load and parse the TOML config file from the user's home directory.
+
+    Args:
+        file_name (str): The name of the configuration file.
+
+    Returns:
+        dict: A dictionary with the configuration options.
+    """
+    home_dir = Path.home()  # Get the user's home directory
+    config_path = home_dir / file_name  # Construct the full path to the dotfile
+
+    if not config_path.exists():
+        # If the dotfile doesn't exist, return an empty dictionary
+        return {}
+
+    try:
+        # Trying to open and parse the TOML file
+        with open(config_path, 'r') as config_file:
+            return toml.load(config_file)
+    except toml.TomlDecodeError as e:
+        # If parsing the file fails, raise an error
+        raise RuntimeError(f"Failed to load or parse the config file: {str(e)}")
+
+
+
 def parse_github_url(github_repository_url: str) -> tuple[str, str]:
     """
     Parses a GitHub repository URL and extracts the username and repository name.
