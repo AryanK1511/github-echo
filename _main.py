@@ -8,7 +8,12 @@ import typer
 from rich.console import Console
 from typing_extensions import Annotated
 
-from application.utils.callbacks import process_tasks, version_callback
+from application.utils.callbacks import (
+    handle_error,
+    load_config_values,
+    process_repository_tasks,
+    version_callback,
+)
 from application.utils.parser import load_toml_config
 
 # Console instances for standard and error output
@@ -72,48 +77,27 @@ def github_repo_insights(
 
     # Load the TOML config from home directory
     config = load_toml_config(".github-echo-config.toml")
-
     if not config:
         err_console.print(
             ":warning: [bold yellow]Warning:[/] configuration file not found. Using default values.",
             style="bold yellow",
         )
 
-    if model == "gemini" and "model" in config:
-        model = config["model"]
-
-    if model_temperature == 0.5 and "model_temperature" in config:
-        model_temperature = config["model_temperature"]
-
-    if not output_file and "output_file" in config:
-        output_file = Path(config["output_file"])
-
-    if not token_usage and "token_usage" in config:
-        token_usage = config["token_usage"]
+    # Load configuration values
+    model, model_temperature, output_file, token_usage = load_config_values(config)
 
     try:
         asyncio.run(
-            process_tasks(
-                github_repository_url=github_repository_url,
-                model=model,
-                model_temperature=model_temperature,
+            process_repository_tasks(
+                repo_url=github_repository_url,
+                selected_model=model,
+                temperature_setting=model_temperature,
                 output_file=output_file,
                 token_usage=token_usage,
             )
         )
     except Exception as e:
-        # This is the central exception handler, all exceptions thrown throughout the program will be caught here
-        err_console.print(f"\n[red]🚨 [bold]Something went wrong[/bold] 🚨 {e}\n")
-        err_console.print(f"[red]{e}[/red]\n")
-        err_console.print(
-            "[bold yellow]Tip:[/bold yellow] Use [bold bright_magenta]github-echo --help[/bold bright_magenta] to get usage information.\n"
-        )
-        err_console.print(
-            "[bold green]For more help, please refer to the project README File.\n"
-        )
-
-        # Exit with status code 1
-        raise typer.Exit(code=1)
+        handle_error(e)
 
 
 # Run the app

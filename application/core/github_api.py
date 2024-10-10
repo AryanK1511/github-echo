@@ -11,13 +11,6 @@ from application.utils.api import query_github
 async def fetch_github_data(owner: str, repo: str) -> Dict[str, Any]:
     """
     Fetches and combines various data points about a GitHub repository using the GitHub API.
-
-    Args:
-        owner (str): The GitHub username or organization name that owns the repository.
-        repo (str): The name of the repository to fetch data for.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing combined data from multiple GitHub API calls.
     """
 
     # Run all the fetch functions concurrently

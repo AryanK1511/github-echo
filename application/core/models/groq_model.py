@@ -24,15 +24,6 @@ except Exception as e:
 def get_groq_summary(repo_data: Dict[str, Any], temperature: float) -> Dict[str, Any]:
     """
     Generates a summary of the repository data using the Groq model.
-
-    Args:
-        repo_data (Dict[str, Any]): A dictionary containing repository information
-            as JSON data.
-        temperature (float): The temperature setting for the model's output variability.
-
-    Returns:
-        Dict[str, Any]: A dictionary containing the formatted response and any usage metadata
-                         returned by the Groq model.
     """
     try:
         # Make the API request to get the summary

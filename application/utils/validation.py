@@ -19,19 +19,6 @@ def check_cli_arguments(
     """
     Validates the command-line arguments for a GitHub repository analysis tool, including checking
     if the required API keys for the selected model are present.
-
-    Args:
-        github_repository_url (str): The URL or SSH path of the GitHub repository to analyze.
-                                     It should be a valid GitHub URL accepted by the GitHub API.
-        model (Optional[str]): The model to use for analysis. Can be either 'gemini' or 'groq'. If no model is provided,
-                               this is ignored.
-        model_temperature (Optional[float]): A temperature value for the model's behavior. Must be between 0 and 1 if provided.
-        output_file (Optional[Path]): The path to an output file where results will be saved. Must be a valid file path and
-                                      not a directory if provided.
-
-    Raises:
-        typer.BadParameter: If any of the inputs are invalid. Provides detailed error messages explaining
-                            what is wrong and how to fix it.
     """
     # Validate GitHub repository URL
     github_api_url_pattern = (

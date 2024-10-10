@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 import typer
 from rich.console import Console
@@ -18,11 +18,18 @@ console = Console()
 err_console = Console(stderr=True)
 
 
+def load_config_values(config: dict) -> Tuple[str, float, Optional[Path], bool]:
+    """Load configuration values with fallbacks to defaults."""
+    selected_model = config.get("model", "gemini")
+    temperature_setting = config.get("model_temperature", 0.5)
+    output_file = Path(config.get("output_file")) if config.get("output_file") else None
+    token_usage = config.get("token_usage", False)
+
+    return selected_model, temperature_setting, output_file, token_usage
+
+
 def version_callback(value: bool):
-    """
-    Callback function to handle the `--version` flag.
-    Prints the version number and exits the application if the flag is provided.
-    """
+    """Handle the `--version` flag."""
     if value:
         __version__ = get_version(__name__, Path(__file__).parent.parent.parent)
         console.print(
@@ -31,99 +38,97 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
-async def process_tasks(
-    github_repository_url: str,
-    model: Optional[str] = "gemini",  # Default model is gemini
-    model_temperature: Optional[float] = None,
+async def process_repository_tasks(
+    repo_url: str,
+    selected_model: Optional[str] = "gemini",
+    temperature_setting: Optional[float] = None,
     output_file: Optional[Path] = None,
     token_usage: Optional[bool] = False,
 ):
-    """
-    Processes the provided GitHub repository URL and performs tasks to analyze the repository.
-
-    Args:
-        github_repository_url (str): The URL of the GitHub repository to analyze.
-        model (Optional[str]): The model to use for generating insights.
-        model_temperature (Optional[float]): Temperature setting for the model.
-        output_file (Optional[Path]): Optional path to an output file where the Markdown summary will be written.
-        token_usage (Optional[bool]): Flag to indicate if token usage should be printed.
-    """
-
+    """Processes the provided GitHub repository URL and performs tasks to analyze the repository."""
     with Progress(
         SpinnerColumn(),
         TextColumn("[bold cyan][progress.description]{task.description}"),
         transient=True,
     ) as progress:
-        # Validate all the arguments provided by the user before trying to run any of the other operations
-        check_cli_arguments(
-            github_repository_url, model, model_temperature, output_file
+        check_cli_arguments(repo_url, selected_model, temperature_setting, output_file)
+        console.print(
+            f"[bold cyan][Model Selected][/bold cyan] [bold yellow]{selected_model}[/bold yellow]\n"
+            f"[bold cyan][Model Temperature][/bold cyan] [bold yellow]{temperature_setting}[/bold yellow] "
+            f"[italic dim](higher values are more random)[/italic dim]"
         )
 
-        # Logging the model details: name and temperature
-        console.print(
-            f"[bold cyan][Model Selected][/bold cyan] [bold yellow]{model}[/bold yellow]\n[bold cyan][Model Temperature][/bold cyan] [bold yellow]{model_temperature}[/bold yellow] [italic dim](controls the creativity of responses; higher values are more random)[/italic dim]"
-        )
         task = progress.add_task(description="Processing...", total=None)
 
-        # Task 01 -> Parse the GitHub URL and extract the owner and repo name
+        # Task 01: Parse the GitHub URL
         progress.update(task, description="Parsing URL...")
-        github_username, github_repository_name = parse_github_url(
-            github_repository_url
-        )
+        repo_owner, repo_name = parse_github_url(repo_url)
 
-        # Task 02 -> Fetch the GitHub data asynchronously
+        # Task 02: Fetch GitHub data
         progress.update(task, description="Fetching data...", completed=1)
-        repo_data_json = await fetch_github_data(
-            github_username, github_repository_name
-        )
+        repo_data_json = await fetch_github_data(repo_owner, repo_name)
 
-        # Task 03 -> Generate the summary based on the selected model
+        # Task 03: Generate summary
         progress.update(task, description="Generating summary...", completed=2)
-
-        if model == "groq":
-            response = get_groq_summary(repo_data_json, model_temperature)
-        else:  # Default to gemini
-            response = get_gemini_summary(repo_data_json, model_temperature)
-
-        usage = response["usage"]
-        repo_summary = response["formatted_response"]
-
-        # Display a message to the user
-        completion_message = (
-            ":sparkles: [bold]Task completed! Here is the generated summary:"
+        response = get_summary_based_on_model(
+            repo_data_json, selected_model, temperature_setting
         )
 
-        if output_file:
-            # Write the summary to the file
-            with open(output_file, "w") as file:
-                file.write(repo_summary)
-            console.print(
-                f"\n\n:sparkles: [bold]Summary written to [bold cyan]{output_file}[/bold cyan]."
-            )
-        else:
-            # Render the summary in markdown format and print to the terminal
-            console.print(f"\n\n{completion_message}")
-            md = Markdown(repo_summary)
-            console.print(md)
+        await handle_summary_output(response, output_file, token_usage)
 
-        # If token_usage argument is specified, print the usage
-        if token_usage:
-            formatted_usage = (
-                "\n[bold green]Token Usage:[/bold green]\n"
-                "[bold yellow]-------------[/bold yellow]\n"
-            )
 
-            if model == "gemini":
-                formatted_usage += (
-                    f"- [cyan]Completion Tokens:[/cyan] [bold]{usage.candidates_token_count}[/bold]\n"
-                    f"- [cyan]Prompt Tokens:[/cyan] [bold]{usage.prompt_token_count}[/bold]\n"
-                    f"- [cyan]Total Tokens:[/cyan] [bold]{usage.total_token_count}[/bold]\n"
-                )
-            elif model == "groq":
-                formatted_usage += (
-                    f"- [cyan]Completion Tokens:[/cyan] [bold]{usage.completion_tokens}[/bold]\n"
-                    f"- [cyan]Prompt Tokens:[/cyan] [bold]{usage.prompt_tokens}[/bold]\n"
-                    f"- [cyan]Total Tokens:[/cyan] [bold]{usage.total_tokens}[/bold]\n"
-                )
+def get_summary_based_on_model(repo_data_json, selected_model, temperature_setting):
+    """Generates the summary based on the selected model."""
+    if selected_model == "groq":
+        return get_groq_summary(repo_data_json, temperature_setting)
+    return get_gemini_summary(repo_data_json, temperature_setting)
 
-            err_console.print(formatted_usage)
+
+async def handle_summary_output(response, output_file, token_usage):
+    """Handles output of the generated summary."""
+    usage = response["usage"]
+    repo_summary = response["formatted_response"]
+
+    if output_file:
+        with open(output_file, "w") as file:
+            file.write(repo_summary)
+        console.print(
+            f"\n\n:sparkles: [bold]Summary written to [bold cyan]{output_file}[/bold cyan]."
+        )
+    else:
+        console.print(
+            "\n\n:sparkles: [bold]Task completed! Here is the generated summary:"
+        )
+        console.print(Markdown(repo_summary))
+
+    if token_usage:
+        print_token_usage(usage)
+
+
+def print_token_usage(usage):
+    """Prints the token usage."""
+    formatted_usage = "\n[bold green]Token Usage:[/bold green]\n[bold yellow]-------------[/bold yellow]\n"
+    if "candidates_token_count" in usage:  # For Gemini
+        formatted_usage += (
+            f"- [cyan]Completion Tokens:[/cyan] [bold]{usage.candidates_token_count}[/bold]\n"
+            f"- [cyan]Prompt Tokens:[/cyan] [bold]{usage.prompt_token_count}[/bold]\n"
+            f"- [cyan]Total Tokens:[/cyan] [bold]{usage.total_token_count}[/bold]\n"
+        )
+    else:  # For Groq
+        formatted_usage += (
+            f"- [cyan]Completion Tokens:[/cyan] [bold]{usage.completion_tokens}[/bold]\n"
+            f"- [cyan]Prompt Tokens:[/cyan] [bold]{usage.prompt_tokens}[/bold]\n"
+            f"- [cyan]Total Tokens:[/cyan] [bold]{usage.total_tokens}[/bold]\n"
+        )
+    err_console.print(formatted_usage)
+
+
+def handle_error(e):
+    """Handles errors during processing."""
+    err_console.print(f"\n[red]🚨 [bold]Something went wrong[/bold] 🚨 {e}\n")
+    err_console.print(f"[red]{e}[/red]\n")
+    err_console.print(
+        "[bold yellow]Tip:[/bold yellow] Use [bold bright_magenta]github-echo --help[/bold bright_magenta] for usage information.\n"
+    )
+    err_console.print("[bold green]For more help, refer to the project README File.\n")
+    raise typer.Exit(code=1)
