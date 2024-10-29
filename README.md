@@ -1,9 +1,6 @@
-<p align="center">
-  <img width="100%" src="https://github.com/AryanK1511/github-echo/blob/main/assets/logo.png?raw=true"><br /><br />
-  <strong>A command-line tool built to obtain in-depth, actionable information about GitHub repositories that is often challenging to decipher manually</strong><br /><br />
-</p>
+# GitHub Echo
 
-<p align="center">
+<p align="left">
   <a href="https://python.org">
     <img src="https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white" alt="Python Version">
   </a>
@@ -27,419 +24,134 @@
   </a>
 </p>
 
-## Table of Contents
+<p align="center">
+  <img width="100%" src="https://github.com/AryanK1511/github-echo/blob/main/assets/logo.png?raw=true"><br /><br />
+</p>
+
+**A command-line tool built to obtain in-depth, actionable information about GitHub repositories that is often challenging to decipher manually.**
+
+> [!NOTE]
+>
+> You should have **Python 3+** installed before using this tool. Download from [python.org](https://www.python.org/downloads/).
+
+Check out the [examples](./_examples/README.md) to learn more about how to use this tool.
+
+## Table of Contentss
 
 - [Usage](#usage)
-- [Installing via PyPi](#installing-via-pypi)
-  - [Prerequisites](#prerequisites)
-  - [Setup Instructions](#setup-instructions)
-    - [For macOS/Linux](#for-macoslinux)
-    - [For Windows](#for-windows)
-- [Running the Tool Locally](#running-the-tool-locally)
-  - [Prerequisites](#prerequisites-1)
-  - [Setup Instructions](#setup-instructions-1)
-    - [1. Clone the Repository](#1-clone-the-repository)
-    - [2. Set Up Environment Variables](#2-set-up-environment-variables)
-    - [3. Install Required Dependencies](#3-install-required-dependencies)
-    - [4. Activate the Virtual Environment](#4-activate-the-virtual-environment)
-    - [5. Running the CLI Tool Locally](#5-running-the-cli-tool-locally)
-      - [On Windows](#on-windows)
-      - [On macOS and Linux](#on-macos-and-linux)
-- [Running Using Docker](#running-using-docker)
-  - [On Windows](#on-windows-1)
-  - [On macOS and Linux](#on-macos-and-linux-1)
 - [Troubleshooting](#troubleshooting)
-- [Further Usage Instructions](#further-usage-instructions)
-  - [Arguments](#arguments)
-  - [Options](#options)
-  - [Status Codes](#status-codes)
-  - [TOML File Configuration](#toml-file-configuration)
-- [More about `github-echo`](#more-about-github-echo)
-  - [Information drawn from the GitHub API](#information-drawn-from-the-github-api)
-  - [GenAI Integration](#genai-integration)
+- [Command Structure](#command-structure)
+- [TOML File Configuration](#toml-file-configuration)
 - [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
 - [License](#license)
 - [Author](#author)
 
 ## Usage
 
-You can use this tool in two ways:
+You can use this tool by installing it from PyPI.
 
-1. **[Install via PyPi](#installing-via-pypi)**: Quickly set up the tool with a simple `pip install`.
-2. **[Run Locally](#running-the-tool-locally)**: Clone the repository and run it directly on your machine for development or testing.
+### Installing via PyPI
 
-## Installing via `PyPi`
-
-### Prerequisites
-
-1. **Python3+**: Ensure `Python3` is installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
-
-### Setup Instructions
-
-1. Open a terminal or command prompt.
-
-2. Install the tool via PyPi:
+1. **Open Terminal/Command Prompt**.
+2. **Install the Tool**:
 
    ```bash
    pip install gh-echo
    ```
 
-3. Once installed, you need to set the required environment variables in your shell configuration. Here are the steps for different systems:
+3. **Set Environment Variables**:
 
-#### For macOS/Linux
+   #### macOS/Linux
 
-- Open your terminal.
-- Add the environment variables to your shell configuration file (e.g., `.bashrc`, `.zshrc`, etc.)
-
-  ```bash
-  export GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Gemini
-  export GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
-  export GITHUB_API_TOKEN='Your GitHub API Token'
-  export GITHUB_API_VERSION='2022-11-28'
-  ```
-
-  - Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
-  - Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
-  - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-  - You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
-
-- Run `source ~/.bashrc` (or `source ~/.zshrc` for Zsh) to apply the changes.
-
-#### For Windows
-
-- Open PowerShell as Administrator.
-- Set the environment variables:
-
-  ```powershell
-  [System.Environment]::SetEnvironmentVariable('GOOGLE_GEMINI_API_KEY', 'Your Google Gemini API Key', 'User') # If you are using Gemini
-  [System.Environment]::SetEnvironmentVariable('GROQ_API_KEY', 'Your Groq API Key', 'User') # If you are using Groq's API
-  [System.Environment]::SetEnvironmentVariable('GITHUB_API_TOKEN', 'Your GitHub API Token', 'User')
-  [System.Environment]::SetEnvironmentVariable('GITHUB_API_VERSION', '2022-11-28', 'User')
-  ```
-
-  - Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
-  - Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
-  - Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-  - You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
-
-- Now you can run the CLI tool from anywhere in your terminal:
-
-  ```bash
-  gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
-  ```
-
-  Example:
-
-  ```bash
-  gh-echo https://github.com/user/repo --output results.md
-  ```
-
-## Running the Tool Locally
-
-### Prerequisites
-
-1. **Python3+**: Ensure `Python3` is installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
-2. **Git**: Ensure Git is installed. You can download it from [git-scm.com](https://git-scm.com/).
-3. **Poetry**: Install Poetry by following the instructions at [poetry.eustace.io](https://python-poetry.org/docs/#installation).
-
-### Setup Instructions
-
-#### 1. Clone the Repository
-
-First, clone the repository to your local machine:
-
-```bash
-git clone https://github.com/AryanK1511/github-echo
-cd github-echo
-```
-
-#### 2. Set Up Environment Variables
-
-For running the tool locally, create a `.env` file in the root of the repository and add the following content:
-
-```bash
-GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Google Gemini
-GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
-GITHUB_API_TOKEN='Your API Token'
-GITHUB_API_VERSION='2022-11-28'
-```
-
-- Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
-- Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
-- Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-- You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
-
-#### 3. Install Required Dependencies
-
-Install the necessary Python packages using Poetry:
-
-```bash
-poetry install
-```
-
-This will install all required dependencies and set up a virtual environment.
-
-#### 4. Activate the Virtual Environment
-
-Activate the Poetry virtual environment with:
-
-```bash
-poetry shell
-```
-
-#### 5. Running the CLI Tool Locally
-
-Once the environment is set up and dependencies are installed, you can run the tool locally.
-
-##### On Windows
-
-1. Open Command Prompt or PowerShell.
-
-2. Navigate to the project directory:
-
-   ```cmd
-   cd path\to\github-echo
-   ```
-
-3. Run the script:
-
-   ```cmd
-   python _main.py <GITHUB_REPOSITORY_URL> [OPTIONS]
-   ```
-
-   Example:
-
-   ```cmd
-   python _main.py https://github.com/user/repo --output results.md
-   ```
-
-##### On macOS and Linux
-
-1. Open Terminal.
-
-2. Navigate to the project directory:
+   Add the following to your shell config (e.g., `.bashrc`, `.zshrc`):
 
    ```bash
-   cd /path/to/github-echo
+   export GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # Optional
+   export GROQ_API_KEY='Your Groq API Key' # Optional
+   export GITHUB_API_TOKEN='Your GitHub API Token'
+   export GITHUB_API_VERSION='2022-11-28' # Optional
    ```
 
-3. Make the script executable (if needed):
+   Run `source ~/.bashrc` or `source ~/.zshrc`.
 
-   ```bash
-   chmod +x _main.py
+   #### Windows
+
+   Open PowerShell and run:
+
+   ```powershell
+   [System.Environment]::SetEnvironmentVariable('GOOGLE_GEMINI_API_KEY', 'Your Google Gemini API Key', 'User') # Optional
+   [System.Environment]::SetEnvironmentVariable('GROQ_API_KEY', 'Your Groq API Key', 'User') # Optional
+   [System.Environment]::SetEnvironmentVariable('GITHUB_API_TOKEN', 'Your GitHub API Token', 'User')
+   [System.Environment]::SetEnvironmentVariable('GITHUB_API_VERSION', '2022-11-28', 'User') # Optional
    ```
 
-4. Run the script:
+4. **Run the Tool**:
 
    ```bash
-   python _main.py <GITHUB_REPOSITORY_URL> [OPTIONS]
+   gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
    ```
 
    Example:
 
    ```bash
-   python _main.py https://github.com/user/repo --output results.md
+   gh-echo https://github.com/user/repo --output results.md
    ```
-
-## Additional Information
-
-- **For Help**: Run `./_main.py --help` or `python _main.py --help` to see the available options and usage instructions.
-- **For Version**: Use the `--version` or `-v` flag to get the version number.
-
-## Running Using Docker
-
-> **WARNING:** If you run using Docker, it will deprive you of a lot of features that the command line tool offers. Pretty print becomes unavailable and overall it doesn't look very pretty. It's always recommended to run this tool locally for development purposes.
-
-### Cloning the repo and setting the environment variables
-
-- First, clone the repository to your local machine:
-
-  ```bash
-  git clone https://github.com/AryanK1511/github-echo
-  cd github-echo
-  ```
-
-- Next, navigate to the `Dockerfile` in the root of this repository and fill in the environment variables
-
-```txt
-ENV GOOGLE_GEMINI_API_KEY='Your Google Gemini API Key' # If you are using Google Gemini
-ENV GROQ_API_KEY='Your Groq API Key' # If you are using Groq's API
-ENV GITHUB_API_TOKEN='Your API Key'
-ENV GITHUB_API_VERSION='2022-11-28'
-```
-
-- Replace `'Your Google Gemini API Key'` with your [Google Gemini API Key](https://aistudio.google.com/app/apikey) if you want to use Google Gemini LLM to extract insights.
-- Replace `'Your Groq API Key'` with your [Groq API Key](https://console.groq.com/keys) if you want to use Groq's API to extract insights.
-- Replace `'Your API Token'` with your [GitHub Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
-- You can leave the `GITHUB_API_VERSION` as is unless you really want to change it.
-
-#### On Windows
-
-- **Install Docker:** Download and install Docker Desktop from [Docker’s website](https://docs.docker.com/engine/install/).
-- **Build the Docker Image:** Open Command Prompt or PowerShell, navigate to the project directory, and build the Docker image:
-
-  ```cmd
-  docker build -t gh-echo .
-  ```
-
-- **Run the Docker Container:** Once the image is built, you can run a container with the following command:
-
-  ```cmd
-  docker run --rm gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
-  ```
-
-  Example:
-
-  ```cmd
-  docker run --rm gh-echo https://github.com/user/repo --output results.md
-  ```
-
-#### On macOS and Linux
-
-- **Install Docker:** Follow instructions at [Docker’s website](https://docs.docker.com/engine/install/).
-- **Build the Docker Image:** Open Terminal, navigate to the project directory, and build the Docker image:
-
-  ```bash
-  docker build -t gh-echo .
-  ```
-
-- **Run the Docker Container:** Once the image is built, you can run a container with the following command:
-
-  ```bash
-  docker run --rm gh-echo <GITHUB_REPOSITORY_URL> [OPTIONS]
-  ```
-
-  Example:
-
-  ```bash
-  docker run --rm gh-echo https://github.com/user/repo --output results.md
-  ```
 
 ## Troubleshooting
 
-- **Invalid GitHub URL**: Ensure the URL is correct and follows the format `https://github.com/owner/repo`.
-- **Connection Issues**: Check your internet connection and API tokens.
-- **Permission Errors**: On Windows, ensure you have the necessary permissions to run scripts. On macOS/Linux, ensure the script has execution permissions.
+- **Invalid GitHub URL**: Ensure the format is `https://github.com/owner/repo`.
+- **Connection Issues**: Check your internet and API tokens.
+- **Permission Errors**: Ensure the script has execution permissions.
 
-## Further Usage Instructions
+## Command Structure
 
 ```bash
-_main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]..._
+_main.py [OPTIONS] GITHUB_REPOSITORY_URL COMMAND [ARGS]...
 ```
 
 ### Arguments
 
-| Argument                | Tsype | Description                                 | Default | Required |
-| ----------------------- | ----- | ------------------------------------------- | ------- | -------- |
-| `github_repository_url` | TEXT  | The URL of the GitHub repository to analyze | None    | Yes      |
+| Argument                | Type | Description                             | Required |
+| ----------------------- | ---- | --------------------------------------- | -------- |
+| `github_repository_url` | TEXT | URL of the GitHub repository to analyze | Yes      |
 
 ### Options
 
-| Option          | Shortcut | Type   | Description                                           | Default |
-| --------------- | -------- | ------ | ----------------------------------------------------- | ------- |
-| `--version`     | `-v`     | Flag   | Get the version number                                | `N/A`   |
-| `--temperature` | `-t`     | Option | Set the temperature for the model's output randomness | `0.5`   |
-| `--output`      | `-o`     | PATH   | Path to the output file                               | None    |
-| `--help`        |          | Flag   | Show this message and exit                            | `N/A`   |
-| `--token-usage` |          | Flag   | Displays token usage to the user via `stderr`         | `N/A`   |
+| Option          | Shortcut | Type   | Description                        | Default |
+| --------------- | -------- | ------ | ---------------------------------- | ------- |
+| `--version`     | `-v`     | Flag   | Get the version number             | N/A     |
+| `--temperature` | `-t`     | Option | Set output randomness (0.0 to 2.0) | 0.5     |
+| `--output`      | `-o`     | PATH   | Path to the output file            | None    |
+| `--help`        |          | Flag   | Show usage information             | N/A     |
+| `--token-usage` |          | Flag   | Display token usage via `stderr`   | N/A     |
 
-### Status Codes
+## TOML File Configuration
 
-When executing the command, the tool returns the following status codes to indicate the outcome of the operation:
-
-- **Status Code 0**: **Success**
-
-  - This status code indicates that the operation completed successfully without any errors. All results are processed as expected.
-
-- **Status Code 1**: **Error**
-
-  - This status code indicates that an error occurred during the execution of the command. An appropriate error message will be displayed to the user, detailing what went wrong. Common reasons for receiving this status code include:
-    - Invalid GitHub repository URL.
-    - Network connectivity issues.
-    - Problems with data retrieval or processing.
-    - Missing API Keys.
-    - Something wrong on the server side with any of the AI providers used.
-
-### TOML File Configuration
-
-`github-echo` supports a **TOML configuration file** that allows you to set default options for the tool, which are loaded from a `.github-echo-config.toml` file in your home directory. This feature simplifies repeated use by enabling persistent configurations without needing to specify them via command-line arguments every time.
-
-#### How It Works
-
-1. The tool will automatically look for a `.github-echo-config.toml` file in your home directory.
-2. If the file is present, the tool will use the values specified there as default configurations.
-3. Command-line arguments always **override** any values specified in the TOML file, allowing for temporary changes as needed.
-
-#### Creating the `.github-echo-config.toml` File
-
-To use this feature, create a `.github-echo-config.toml` file in your home directory with the following structure:
+Create a `.github-echo-config.toml` file in your home directory for default settings:
 
 ```toml
 # Example .github-echo-config.toml
-
-# GitHub repository URL to analyze
 github_repository_url = "https://github.com/username/repository"
-
-# Select the model to use, either "gemini" or "groq"
-model = "gemini"
-
-# Model temperature setting, ranging from 0.0 (deterministic) to 2.0 (random)
+model = "gemini" # or "groq"
 model_temperature = 0.5
-
-# Path to the output file for storing results
 output_file = "/path/to/output/results.md"
-
-# Flag to enable or disable token usage reporting
 token_usage = true
 ```
 
-#### Using the Configuration File
+- **Path**:
+  - Linux/macOS: `~/`
+  - Windows: `C:\Users\YourUsername\`
 
-- **Step 1**: Create the `.github-echo-config.toml` file in your home directory.
-  - On Linux/macOS: `~/`
-  - On Windows: `C:\Users\YourUsername\`
-- **Step 2**: Populate the file with your preferred default values.
-
-**Example File Path:**
-
-- Linux/macOS: `/home/username/.github-echo-config.toml`
-- Windows: `C:\Users\YourUsername\.github-echo-config.toml`
-
-## More about `github-echo`
-
-### Information drawn from the GitHub API
-
-The tool fetches the following key information about GitHub repositories:
-
-- **Repository Metadata**: Name, description, owner, URL, and other basic information.
-- **Contributors**: Details about contributors, including their usernames, IDs, and avatars.
-- **Issues and Pull Requests**: Information about open and closed issues and pull requests, including titles, states, and comments.
-- **Labels**: Labels associated with issues and pull requests.
-- **Activity Data**: Data related to repository activity, such as commit history and contributions.
-
-### GenAI Integration
-
-**Repo Insights** uses GenAI to analyze the fetched repository data. This provides advanced capabilities for:
-
-- **Summary Generation**: Creating comprehensive summaries based on the repository data.
-- **Insight Extraction**: Identifying key patterns and insights that are not immediately obvious from raw data.
-
-**How It Works**:
-
-1. **Data Fetching**: The tool queries GitHub's API to gather repository data.
-2. **Data Processing**: The fetched data is processed and formatted.
-3. **AI Analysis**: The processed data is sent to an LLM, which analyzes it and generates a detailed summary.
-4. **Summary Output**: The summary is either displayed in the terminal or saved to a specified file.
+Populate with preferred values for defaults.
 
 ## Contributing
 
-We welcome contributions to improve **Repo Insights**. If you have suggestions, bug reports, or enhancements, please open an issue or submit a pull request.
+For contributions, please refer to the [CONTRIBUTING](./CONTRIBUTING.md) file.
 
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/your-feature`).
-5. Create a new Pull Request.
+## Code of Conduct
+
+Please read and adhere to our [CODE_OF_CONDUCT](./CODE_OF_CONDUCT.md).
 
 ## License
 

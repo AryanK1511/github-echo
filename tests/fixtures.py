@@ -16,9 +16,13 @@ def run_command() -> callable:
     """
 
     def _run_command(*args: str) -> subprocess.CompletedProcess:
-        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-        command: List[str] = ["python3", "_main.py"] + list(args)
-        result = subprocess.run(command, cwd=repo_root, capture_output=True, text=True)
+        repo_root = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..')
+        )
+        command: List[str] = ['python3', '_main.py'] + list(args)
+        result = subprocess.run(
+            command, cwd=repo_root, capture_output=True, text=True
+        )
 
         return result
 

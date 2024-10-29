@@ -3,45 +3,59 @@ from typing import Dict
 import google.generativeai as genai
 
 # Define the models and system instruction
-GEMINI_MODEL = "gemini-1.5-flash"
-GROQ_MODEL = "mixtral-8x7b-32768"
+GEMINI_MODEL = 'gemini-1.5-flash'
+GROQ_MODEL = 'mixtral-8x7b-32768'
 
 SYSTEM_INSTRUCTION = """
-You are a software developer analyzing a GitHub repository. Your task is to provide actionable insights into various aspects of the repository including development trends, community engagement, release cadence, code base composition, repository popularity, branch protection rules, and potential improvements. What key information would you need to provide useful insights?
+You are a software developer analyzing a GitHub repository. Your task is to
+provide actionable insights into various aspects of the repository including
+development trends, community engagement, release cadence, code base
+composition, repository popularity, branch protection rules, and potential
+improvements. What key information would you need to provide useful insights?
 """
 
 # Define prompts for each category of insights
 CATEGORY_PROMPTS: Dict[str, str] = {
-    "contribution_trends": """
-    Analyze the commit frequency and identify significant trends or patterns in development. Assess contributor activity and correlate it with major repository events.
+    'contribution_trends': """
+    Analyze the commit frequency and identify significant trends or patterns
+    in development. Assess contributor activity and correlate it with major
+    repository events.
     """,
-    "community_engagement": """
-    Evaluate average issue resolution times and pull request merges. Determine the impact of contributors on these metrics.
+    'community_engagement': """
+    Evaluate average issue resolution times and pull request merges.
+    Determine the impact of contributors on these metrics.
     """,
-    "release_cadence": """
-    Examine release frequency and timing. Identify patterns in release cycles or versioning.
+    'release_cadence': """
+    Examine release frequency and timing. Identify patterns in release
+    cycles or versioning.
     """,
-    "code_base_composition": """
-    Provide insights into language usage trends and dependency health. Note any potential security concerns.
+    'code_base_composition': """
+    Provide insights into language usage trends and dependency health.
+    Note any potential security concerns.
     """,
-    "repository_popularity": """
-    Analyze repository traffic and correlate with stars, forks, and watchers to gauge popularity.
+    'repository_popularity': """
+    Analyze repository traffic and correlate with stars, forks, and watchers
+    to gauge popularity.
     """,
-    "branch_protection": """
-    Evaluate the current branch protection rules. Identify areas where protection is missing or could be improved. Suggest implementing rules like requiring code reviews, testing, and approvals before merging changes.
+    'branch_protection': """
+    Evaluate the current branch protection rules. Identify areas where
+    protection is missing or could be improved. Suggest implementing rules
+    like requiring code reviews, testing, and approvals before merging changes.
     """,
-    "potential_changes": """
+    'potential_changes': """
     Identify areas of the codebase needing contributions or improvements.
     """,
-    "summary": """
-    Summarize key insights from each category and provide an overall assessment of the repository's health and growth potential.
+    'summary': """
+    Summarize key insights from each category and provide an overall
+    assessment of the repository's health and growth potential.
     """,
 }
 
 
 def generate_prompt(repo_data: Dict[str, str]) -> str:
     """
-    Generates a prompt for the Gemini model based on the provided GitHub repository data.
+    Generates a prompt for the Gemini model based on the provided GitHub
+    repository data.
 
     Parameters:
         repo_data (dict): A dictionary containing GitHub repository data.
@@ -50,14 +64,17 @@ def generate_prompt(repo_data: Dict[str, str]) -> str:
         str: A prompt string formatted for the Gemini model.
     """
     return f"""
-    Analyze the following GitHub repository data and provide structured insights:
+    Analyze the following GitHub repository data and provide structured
+    insights:
 
         {repo_data}
 
-    For each category, provide a list of key insights with the following requirements:
+    For each category, provide a list of key insights with the following
+    requirements:
     - Each insight should include a title and a concise description.
     - Avoid duplication of insights.
-    - Ensure each description is data-driven and actionable, including quantifiable numbers where applicable.
+    - Ensure each description is data-driven and actionable, including
+      quantifiable numbers where applicable.
 
     **Categories and Prompts:**
 
@@ -120,38 +137,46 @@ def generate_prompt(repo_data: Dict[str, str]) -> str:
 
 
 def get_gemini_generation_config(
-    candidate_count=1, temperature=0.5, stop_sequences=None, max_output_tokens=None
+    candidate_count=1,
+    temperature=0.5,
+    stop_sequences=None,
+    max_output_tokens=None,
 ):
     """
-    Creates a GenerationConfig object with specified parameters for generating responses.
+    Creates a GenerationConfig object with specified parameters for
+    generating responses.
 
     Parameters:
-        candidate_count (int): Number of responses to generate (integer ≥ 1). Default is 1.
-        temperature (float): Controls randomness of output (0.0 to 2.0). Default is 0.5.
-        stop_sequences (list of str, optional): Up to 5 sequences to stop generation. Default is None.
-        max_output_tokens (int, optional): Maximum number of tokens in a response (integer ≥ 1). Default is None.
+        candidate_count (int): Number of responses to generate (integer ≥ 1).
+        Default is 1.
+        temperature (float): Controls randomness of output (0.0 to 2.0).
+        Default is 0.5.
+        stop_sequences (list of str, optional): Up to 5 sequences to stop
+        generation. Default is None.
+        max_output_tokens (int, optional): Maximum number of tokens in a
+        response (integer ≥ 1). Default is None.
 
     Returns:
-        genai.types.GenerationConfig: An instance of GenerationConfig with the provided settings.
+        genai.types.GenerationConfig: An instance of GenerationConfig with
+        the provided settings.
     """
 
-    if stop_sequences is not None:
-        if (
-            not isinstance(stop_sequences, list)
-            or len(stop_sequences) > 5
-            or not all(isinstance(seq, str) for seq in stop_sequences)
-        ):
-            raise ValueError("stop_sequences must be a list of up to 5 strings.")
+    if stop_sequences is not None and (
+        not isinstance(stop_sequences, list)
+        or len(stop_sequences) > 5
+        or not all(isinstance(seq, str) for seq in stop_sequences)
+    ):
+        raise ValueError('stop_sequences must be a list of up to 5 strings.')
 
     if max_output_tokens is not None and (
         not isinstance(max_output_tokens, int) or max_output_tokens < 1
     ):
-        raise ValueError("max_output_tokens must be an integer ≥ 1.")
+        raise ValueError('max_output_tokens must be an integer ≥ 1.')
 
     return genai.types.GenerationConfig(
         candidate_count=candidate_count,
         temperature=temperature,
         stop_sequences=stop_sequences or [],
         max_output_tokens=max_output_tokens,
-        response_mime_type="application/json",
+        response_mime_type='application/json',
     )

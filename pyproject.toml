@@ -17,6 +17,12 @@ classifiers = [
 packages = [{include = "application"}]
 include = ["_main.py", "_config.py", "pyproject.toml"]
 
+[tool.poetry.scripts]
+lint = "_scripts:lint" # Lint all files in the current directory, and fix any fixable errors.
+format = "_scripts:format_code" # Format all files in the current directory
+lint-and-format = "_scripts:lint_and_format" # Lint and format
+gh-echo = "_main:app"
+
 [tool.poetry.dependencies]
 python = "^3.9"
 typer = "^0.12.5"
@@ -27,6 +33,7 @@ pytest = "^8.3.3"
 single-source = "^0.4.0"
 groq = "^0.11.0"
 toml = "^0.10.2"
+pre-commit = "^4.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
@@ -35,5 +42,4 @@ ruff = "^0.6.4"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.scripts]
-gh-echo = "_main:app"
+

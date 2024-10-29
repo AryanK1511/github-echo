@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-python.python", // Python extension for development
+        "esbenp.prettier-vscode", // Prettier for code formatting
+        "ms-python.vscode-pylance", // Pylance for enhanced Python language features
+        "yzhang.markdown-all-in-one", // Enhanced Markdown support
+        "charliermarsh.ruff" // For Ruff Python formatter
+    ]
+}

@@ -23,7 +23,8 @@ err_console = Console(stderr=True, soft_wrap=True)
 # Initialize the Typer app
 app = typer.Typer(
     no_args_is_help=True,
-    help="CLI tool built to obtain in-depth, actionable information about GitHub repositories.",
+    help='CLI tool built to obtain in-depth, actionable information about '
+    'GitHub repositories.',
 )
 
 
@@ -31,14 +32,16 @@ app = typer.Typer(
 def github_repo_insights(
     github_repository_url: Annotated[
         Optional[str],
-        typer.Argument(..., help="The URL of the GitHub repository to analyze"),
+        typer.Argument(
+            ..., help='The URL of the GitHub repository to analyze'
+        ),
     ],
     version: Annotated[
         Optional[bool],
         typer.Option(
-            "--version",
-            "-v",
-            help="Get the version number",
+            '--version',
+            '-v',
+            help='Get the version number',
             is_eager=True,
             callback=version_callback,
         ),
@@ -46,45 +49,56 @@ def github_repo_insights(
     model: Annotated[
         Optional[str],
         typer.Option(
-            "--model",
-            "-m",
-            help="Choose the LLM that you want to be used to generate insights. Can be 'gemini' or 'groq'.",
+            '--model',
+            '-m',
+            help='Choose the LLM that you want to be used to generate '
+            "insights. Can be 'gemini' or 'groq'.",
         ),
-    ] = "gemini",
+    ] = 'gemini',
     model_temperature: Annotated[
         Optional[float],
         typer.Option(
-            "--temperature",
-            "-t",
-            help="Sets the temperature for the model, with a range from 0.0 (more deterministic) to 2.0 (more random).",
+            '--temperature',
+            '-t',
+            help='Sets the temperature for the model, with a range from '
+            '0.0 (more deterministic) to 2.0 (more random).',
         ),
     ] = 0.5,
     output_file: Annotated[
-        Optional[Path], typer.Option("--output", "-o", help="Path to the output file")
+        Optional[Path],
+        typer.Option('--output', '-o', help='Path to the output file'),
     ] = None,
     token_usage: Annotated[
-        bool, typer.Option("--token-usage", help="Flag for printing token usage")
+        bool,
+        typer.Option('--token-usage', help='Flag for printing token usage'),
     ] = False,
 ):
     """
-    Main function to analyze a GitHub repository and optionally output the results to a file.
+    Main function to analyze a GitHub repository and optionally output the
+    results to a file.
 
     Args:
-        github_repository_url (str): Required. The URL of the GitHub repository to analyze.
-        version (Optional[bool]): Optional. If provided, prints the version number and exits the application.
-        output_file (Optional[Path]): Optional. If provided, the path to a file where the Markdown summary will be saved.
+        github_repository_url (str): Required. The URL of the GitHub
+        repository to analyze.
+        version (Optional[bool]): Optional. If provided, prints the version
+        number and exits the application.
+        output_file (Optional[Path]): Optional. If provided, the path to
+        a file where the Markdown summary will be saved.
     """
 
     # Load the TOML config from home directory
-    config = load_toml_config(".github-echo-config.toml")
+    config = load_toml_config('.github-echo-config.toml')
     if not config:
         err_console.print(
-            ":warning: [bold yellow]Warning:[/] configuration file not found. Using default values.",
-            style="bold yellow",
+            ':warning: [bold yellow]Warning:[/] configuration file not found. '
+            'Using default values.',
+            style='bold yellow',
         )
 
     # Load configuration values
-    model, model_temperature, output_file, token_usage = load_config_values(config)
+    model, model_temperature, output_file, token_usage = load_config_values(
+        config
+    )
 
     try:
         asyncio.run(
@@ -101,5 +115,5 @@ def github_repo_insights(
 
 
 # Run the app
-if __name__ == "__main__":
+if __name__ == '__main__':
     app()

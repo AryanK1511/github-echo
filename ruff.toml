@@ -1,0 +1,43 @@
+# Ref Doc: https://docs.astral.sh/ruff/tutorial/#configuration
+
+# Enable fix mode for automatically fixing linting errors
+fix = true
+
+# Set the maximum line length for code to 79 characters
+line-length = 79
+
+[lint]
+# Specify the categories of linting errors to check
+select = [
+    "A", # PEP8 error codes (style guide for Python)
+    "B", # flake8-bugbear (potential bugs)
+    "E", # flake8 pycodestyle errors (style violations)
+    "F", # pyflakes (checks for errors in Python code)
+    "I", # isort (enforces consistent import order)
+    "N", # pep8-naming (enforces naming conventions)
+    "W", # warnings and style errors (general warnings)
+]
+
+# Exclude specific directories from linting to avoid unnecessary checks
+exclude = [
+    ".git",        # Git version control directory
+    "__pycache__", # Compiled Python files directory
+    "venv",        # Virtual environment directory
+    "build",       # Build artifacts
+    "dist",        # Distribution packages
+]
+
+[format]
+# Specify formatting preferences for the code
+quote-style = "single"   # Use single quotes for strings
+docstring-code-format=true # Enable code formatting in docstrings
+docstring-code-line-length = 72 # Set max line length for code in docstrings
+indent-style = "space"    # Use spaces for indentation
+
+[lint.pycodestyle]
+# Configure specific settings for pycodestyle checks
+max-line-length = 100     # Allow max line length of 100 characters for pycodestyle
+
+[lint.pydocstyle]
+# Configure pydocstyle for docstring style checks
+convention = "google"     # Use Google style for docstrings

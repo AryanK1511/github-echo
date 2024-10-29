@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 import toml
 
 
-def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
+def load_toml_config(file_name: str = '.github-echo-config.toml') -> Dict:
     """
     Load and parse a TOML config file from the user's home directory.
     """
@@ -15,17 +15,19 @@ def load_toml_config(file_name: str = ".github-echo-config.toml") -> Dict:
         return {}
 
     try:
-        with open(config_path, "r") as config_file:
+        with open(config_path) as config_file:
             return toml.load(config_file)
     except toml.TomlDecodeError as e:
-        raise RuntimeError(f"Failed to load or parse the config file: {str(e)}")
+        raise RuntimeError(
+            f'Failed to load or parse the config file: {str(e)}'
+        ) from e
 
 
 def parse_github_url(github_repository_url: str) -> Tuple[str, str]:
     """
     Extract username and repository name from a GitHub URL.
     """
-    url_split_arr = github_repository_url.split("/")
+    url_split_arr = github_repository_url.split('/')
 
     if len(url_split_arr) < 5 or not url_split_arr[3] or not url_split_arr[4]:
         raise ValueError(
@@ -39,21 +41,21 @@ def json_to_markdown(data: Dict[str, list]) -> str:
     """
     Convert a JSON-like dict to a Markdown formatted string.
     """
-    result = ""
+    result = ''
 
     for category, insights in data.items():
         if insights:
             formatted_category = format_category_name(category)
-            result += f"## {formatted_category}\n"
+            result += f'## {formatted_category}\n'
 
             for insight in insights:
-                title = insight.get("title", "").strip()
-                description = insight.get("description", "").strip()
+                title = insight.get('title', '').strip()
+                description = insight.get('description', '').strip()
 
                 if title and description:
-                    result += f" - **{title}**: {description}\n"
+                    result += f' - **{title}**: {description}\n'
 
-            result += "\n"
+            result += '\n'
 
     return result
 
@@ -62,5 +64,5 @@ def format_category_name(name: str) -> str:
     """
     Format a category name with capitalized words.
     """
-    words = name.split("_")
-    return " ".join(word.capitalize() for word in words)
+    words = name.split('_')
+    return ' '.join(word.capitalize() for word in words)

@@ -15,10 +15,10 @@ from application.utils.parser import json_to_markdown
 # Configure the Gemini GenAI API in order to make requests to it
 try:
     genai.configure(api_key=GOOGLE_GEMINI_API_KEY)
-except Exception:
+except Exception as e:
     raise Exception(
-        "Failed to configure the Gemini GenAI API. Check whether the API key is valid."
-    )
+        'Failed to configure the Gemini GenAI API. Check whether the API key is valid.'
+    ) from e
 
 model = genai.GenerativeModel(
     model_name=GEMINI_MODEL, system_instruction=SYSTEM_INSTRUCTION
@@ -33,7 +33,7 @@ def get_gemini_summary(
     """
     try:
         response = model.generate_content(
-            f"{generate_prompt(github_data)}",
+            f'{generate_prompt(github_data)}',
             generation_config=get_gemini_generation_config(
                 temperature=model_temperature
             ),
@@ -43,9 +43,11 @@ def get_gemini_summary(
         formatted_response = json_to_markdown(json_response)
 
         return {
-            "formatted_response": formatted_response,
-            "usage": response.usage_metadata,
+            'formatted_response': formatted_response,
+            'usage': response.usage_metadata,
         }
 
     except Exception as e:
-        raise RuntimeError(f"Failed to generate summary using gemini: {str(e)}")
+        raise RuntimeError(
+            f'Failed to generate summary using gemini: {str(e)}'
+        ) from e

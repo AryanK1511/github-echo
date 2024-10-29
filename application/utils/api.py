@@ -12,9 +12,9 @@ async def query_github(url: str) -> Dict[str, Any]:
 
     # Define the headers to be included in the request
     headers = {
-        "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {GITHUB_API_TOKEN}",
-        "X-GitHub-Api-Version": GITHUB_API_VERSION,
+        'Accept': 'application/vnd.github+json',
+        'Authorization': f'Bearer {GITHUB_API_TOKEN}',
+        'X-GitHub-Api-Version': GITHUB_API_VERSION,
     }
 
     async with httpx.AsyncClient() as client:
