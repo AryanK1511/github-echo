@@ -32,6 +32,7 @@ All contributions are encouraged and valued! Check the [Table of Contents](#tabl
     - [2. Set Up Environment Variables](#2-set-up-environment-variables)
     - [3. Install Dependencies](#3-install-dependencies)
     - [4. Activate the Virtual Environment](#4-activate-the-virtual-environment)
+    - [5. Set Up Pre-commit Hook](#5-pre-commit-hook-setup)
   - [Running Tests](#running-tests)
   - [Running the Linting Scripts](#running-the-linting-scripts)
   - [Running the project using Docker](#running-the-project-using-docker)
@@ -185,6 +186,18 @@ Activate the virtual environment created by Poetry:
 ```bash
 poetry shell
 ```
+
+#### 5. Pre-Commit Hook Setup
+
+Before you start committing your changes, you need to set up the pre-commit hook. This is a one-time setup that will help ensure your code adheres to the project's coding standards automatically.
+
+To install the pre-commit hook, run the following command in your terminal:
+
+```bash
+pre-commit install
+```
+
+This command will install the necessary hooks that will run automatically before each commit, helping you catch any issues early.
 
 ### Running Tests
 
