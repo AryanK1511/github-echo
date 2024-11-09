@@ -4,8 +4,8 @@ repos:
   # Ruff version.
   rev: v0.7.1
   hooks:
-    # Run the linter.
     - id: ruff
+      name: Run Linter
       args: [ --fix ]
-    # Run the formatter.
     - id: ruff-format
+      name: Run formatter

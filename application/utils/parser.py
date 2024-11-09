@@ -44,18 +44,29 @@ def json_to_markdown(data: Dict[str, list]) -> str:
     result = ''
 
     for category, insights in data.items():
-        if insights:
-            formatted_category = format_category_name(category)
-            result += f'## {formatted_category}\n'
+        # Filter out insights that don't have both a title and description
+        valid_insights = [
+            insight
+            for insight in insights
+            if insight.get('title', '').strip()
+            and insight.get('description', '').strip()
+        ]
 
-            for insight in insights:
-                title = insight.get('title', '').strip()
-                description = insight.get('description', '').strip()
+        # If no valid insights exist for the category, skip it
+        if not valid_insights:
+            continue
 
-                if title and description:
-                    result += f' - **{title}**: {description}\n'
+        # Format category name and add to result
+        formatted_category = format_category_name(category)
+        result += f'## {formatted_category}\n'
 
-            result += '\n'
+        # Add valid insights to the category
+        for insight in valid_insights:
+            title = insight['title'].strip()
+            description = insight['description'].strip()
+            result += f' - **{title}**: {description}\n'
+
+        result += '\n'
 
     return result
 

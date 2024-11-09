@@ -21,6 +21,14 @@ include = ["_main.py", "_config.py", "_constants.py", "pyproject.toml"]
 lint = "_scripts:lint"
 format = "_scripts:format_code"
 lint-and-format = "_scripts:lint_and_format"
+run-tests = "_scripts:run_tests"
+run-tests-on-files = "_scripts:run_tests_on_files"
+run-tests-on-classes = "_scripts:run_tests_on_classes"
+run-coverage = "_scripts:run_coverage"
+run-coverage-report = "_scripts:run_coverage_report"
+run-coverage-html = "_scripts:run_coverage_html"
+watch-tests = "_scripts:watch_tests"
+watch-tests-coverage = "_scripts:watch_tests_with_coverage"
 gh-echo = "_main:app"
 
 [tool.poetry.dependencies]
@@ -34,6 +42,8 @@ single-source = "^0.4.0"
 groq = "^0.11.0"
 toml = "^0.10.2"
 pre-commit = "^4.0.1"
+coverage = "^7.6.4"
+pytest-watch = "^4.2.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"

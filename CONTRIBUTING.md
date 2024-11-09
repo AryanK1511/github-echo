@@ -153,10 +153,76 @@ This project is built using Visual Studio Code (VSCode) as the primary developme
 
 ### Running Tests
 
-To run tests, use:
+You can run tests in various ways depending on your requirements:
+
+#### Run All Tests
+
+To run all tests, use:
+
+```bash
+poetry run run-tests
+```
+
+or simply:
 
 ```bash
 pytest
+```
+
+#### Run Tests on Specific Files
+
+To run tests on specific files, provide the file paths as arguments:
+
+```bash
+poetry run run-tests-on-files tests/unit/test_file1.py tests/unit/test_file2.py
+```
+
+#### Run Tests on Specific Classes
+
+To run tests on specific classes within your test suite:
+
+```bash
+poetry run run-tests-on-classes TestClass1 TestClass2
+```
+
+#### Run Tests with Coverage
+
+To execute tests while collecting code coverage data:
+
+```bash
+poetry run run-coverage
+```
+
+After running the above command, you can generate different coverage reports:
+
+- **Generate a Coverage Report in the Terminal**:
+
+  ```bash
+  poetry run run-coverage-report
+  ```
+
+- **Generate an HTML Coverage Report**:
+
+  ```bash
+  poetry run run-coverage-html
+  ```
+
+  This will generate an HTML report in a `htmlcov` directory. Open `htmlcov/index.html` in your browser to view a detailed, interactive coverage report.
+
+#### Watch Tests
+
+For automatically re-running tests upon file changes, use **pytest-watch**:
+
+```bash
+poetry run watch-tests
+```
+
+#### Watch Tests with Coverage
+
+To continuously run tests with coverage every time files change:
+
+```bash
+poetry run watch-tests-coverage
 ```
 
 ### Running the Linting Scripts

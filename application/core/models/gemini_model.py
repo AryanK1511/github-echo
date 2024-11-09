@@ -12,7 +12,6 @@ from application.utils.model_config import (
 )
 from application.utils.parser import json_to_markdown
 
-# Configure the Gemini GenAI API in order to make requests to it
 try:
     genai.configure(api_key=GOOGLE_GEMINI_API_KEY)
 except Exception as e:
@@ -27,7 +26,7 @@ model = genai.GenerativeModel(
 
 def get_gemini_summary(
     github_data: Dict[str, Any], model_temperature: float
-) -> Dict[str, Any]:  # Changed to Any for the return type
+) -> Dict[str, Any]:
     """
     Generates a summary of the GitHub repository data using the Gemini model.
     """

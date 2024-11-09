@@ -13,7 +13,6 @@ from application.utils.parser import json_to_markdown
 
 GROQ_API_KEY = GROQ_API_KEY if GROQ_API_KEY else ''
 
-# Initialize the Groq client
 client = None
 try:
     client = Groq(api_key=GROQ_API_KEY)
@@ -30,7 +29,6 @@ def get_groq_summary(
     Generates a summary of the repository data using the Groq model.
     """
     try:
-        # Make the API request to get the summary
         response = client.chat.completions.create(
             model=GROQ_MODEL,
             messages=[
@@ -42,7 +40,6 @@ def get_groq_summary(
             stream=False,
         )
 
-        # Parse the response and convert it to Markdown format
         json_response = json.loads(response.choices[0].message.content)
         formatted_response = json_to_markdown(json_response)
 
