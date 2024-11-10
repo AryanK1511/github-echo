@@ -50,6 +50,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
+      
+      - name: Set environment variables
+        run: |
+          echo "google_gemini_api_key=Sample" >> $GITHUB_ENV
+          echo "github_api_token=Sample" >> $GITHUB_ENV
+          echo "groq_api_key=Sample" >> $GITHUB_ENV
 
       - name: Run tests
         run: |
