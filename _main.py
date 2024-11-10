@@ -76,7 +76,7 @@ def analyze(
     config = load_toml_config(_constants.CONFIG_FILE) or {}
     if not config:
         err_console.print(
-            ':warning: [bold yellow]Warning:[/] configuration file not found. ',
+            '\n:warning: [bold yellow]Warning:[/] configuration file not found. ',
             style='bold yellow',
         )
 

@@ -1,8 +1,6 @@
 import os
-import sys
 from os.path import abspath, dirname, join
 
-import typer
 from dotenv import load_dotenv
 from rich.console import Console
 
@@ -29,24 +27,3 @@ GROQ_API_KEY = config.get('api_keys', {}).get('groq_api_key') or os.getenv(
 GITHUB_API_TOKEN = config.get('api_keys', {}).get(
     'github_api_token'
 ) or os.getenv('github_api_token')
-
-if not GITHUB_API_TOKEN:
-    err_console.print(
-        '\n[red]🚨 [bold]Error:[/bold] github_api_token not found 🚨\n'
-    )
-    typer.Exit(code=1)
-    sys.exit(1)
-
-if not GOOGLE_GEMINI_API_KEY:
-    err_console.print(
-        ':warning: [bold yellow]Warning:[/] google_gemini_api_key not found. You will not be',
-        'able to use the gemini model without this',
-        style='bold yellow',
-    )
-
-if not GROQ_API_KEY:
-    err_console.print(
-        ':warning: [bold yellow]Warning:[/] groq_api_key not found. You will not be able'
-        ' to use the groq model without this',
-        style='bold yellow',
-    )

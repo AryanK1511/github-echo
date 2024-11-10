@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -7,6 +8,7 @@ from rich.markdown import Markdown
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from single_source import get_version
 
+from _config import GITHUB_API_TOKEN, GOOGLE_GEMINI_API_KEY, GROQ_API_KEY
 from application.core.github_api import fetch_github_data
 from application.core.models.gemini_model import get_gemini_summary
 from application.core.models.groq_model import get_groq_summary
@@ -40,6 +42,27 @@ async def process_repository_tasks(
 ):
     """Processes the provided GitHub repository URL and performs tasks
     to analyze the repository."""
+
+    if not GITHUB_API_TOKEN:
+        err_console.print(
+            '\n[red]🚨 [bold]Error:[/bold] github_api_token not found 🚨\n'
+        )
+        typer.Exit(code=1)
+        sys.exit(1)
+
+    if not GOOGLE_GEMINI_API_KEY:
+        err_console.print(
+            ':warning: [bold yellow]Warning:[/] google_gemini_api_key not found. You will not be',
+            'able to use the gemini model without this',
+            style='bold yellow',
+        )
+
+    if not GROQ_API_KEY:
+        err_console.print(
+            ':warning: [bold yellow]Warning:[/] groq_api_key not found. You will not be able'
+            ' to use the groq model without this',
+            style='bold yellow',
+        )
 
     with Progress(
         SpinnerColumn(),
