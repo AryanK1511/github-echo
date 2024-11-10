@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 import toml
 
 
-def load_toml_config(file_name: str = '.github-echo-config.toml') -> Dict:
+def load_toml_config(file_name: str) -> Dict:
     """
     Load and parse a TOML config file from the user's home directory.
     """

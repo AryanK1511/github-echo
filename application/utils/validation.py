@@ -1,4 +1,3 @@
-import os
 import re
 from pathlib import Path
 from typing import Optional
@@ -6,7 +5,6 @@ from typing import Optional
 import typer
 from rich.console import Console
 
-# Initialize console for error messages
 err_console = Console(stderr=True)
 
 
@@ -31,33 +29,27 @@ def check_cli_arguments(
             'allowed by GitHub.'
         )
 
-    # Validate model
+    if not model:
+        raise typer.BadParameter(
+            'Model must be specified either in CLI or config. '
+            'Please choose either "gemini" or "groq".'
+        )
+
     if model and model not in ['gemini', 'groq']:
         raise typer.BadParameter(
             'Invalid model. Please choose either "gemini" or "groq".'
         )
 
-    # Check for required API key based on the model
-    if model == 'gemini':
-        if not os.getenv('GOOGLE_GEMINI_API_KEY'):
-            raise typer.BadParameter(
-                'GOOGLE_GEMINI_API_KEY is required for the gemini model but not '
-                'found in the environment.'
-            )
-    elif model == 'groq':
-        if not os.getenv('GROQ_API_KEY'):
-            raise typer.BadParameter(
-                'GROQ_API_KEY is required for the groq model but not found in the '
-                'environment.'
-            )
+    if not model_temperature:
+        raise typer.BadParameter(
+            'Model temperature must be specified either in CLI or config.'
+        )
 
-    # Validate model_temperature
     if model_temperature is not None and not (0 <= model_temperature <= 1):
         raise typer.BadParameter(
             'Invalid model temperature. The value should be between 0 and 1.'
         )
 
-    # Validate output file
     if output_file:
         if output_file.is_dir():
             raise typer.BadParameter(

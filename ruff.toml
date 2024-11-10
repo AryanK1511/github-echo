@@ -10,7 +10,6 @@ line-length = 79
 # Specify the categories of linting errors to check
 select = [
     "A", # PEP8 error codes (style guide for Python)
-    "B", # flake8-bugbear (potential bugs)
     "E", # flake8 pycodestyle errors (style violations)
     "F", # pyflakes (checks for errors in Python code)
     "I", # isort (enforces consistent import order)

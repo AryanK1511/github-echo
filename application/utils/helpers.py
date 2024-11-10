@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 import typer
 from rich.console import Console
@@ -13,27 +13,13 @@ from application.core.models.groq_model import get_groq_summary
 from application.utils.parser import parse_github_url
 from application.utils.validation import check_cli_arguments
 
-# Console instances for standard and error output
 console = Console()
 err_console = Console(stderr=True)
 
 
-def load_config_values(
-    config: dict,
-) -> Tuple[str, float, Optional[Path], bool]:
-    """Load configuration values with fallbacks to defaults."""
-    selected_model = config.get('model', 'gemini')
-    temperature_setting = config.get('model_temperature', 0.5)
-    output_file = (
-        Path(config.get('output_file')) if config.get('output_file') else None
-    )
-    token_usage = config.get('token_usage', False)
-
-    return selected_model, temperature_setting, output_file, token_usage
-
-
-def version_callback(value: bool):
+def get_cli_version(value: bool):
     """Handle the `--version` flag."""
+
     if value:
         __version__ = get_version(
             __name__, Path(__file__).parent.parent.parent
@@ -48,12 +34,13 @@ def version_callback(value: bool):
 async def process_repository_tasks(
     repo_url: str,
     selected_model: Optional[str] = 'gemini',
-    temperature_setting: Optional[float] = None,
+    temperature_setting: Optional[float] = 0.5,
     output_file: Optional[Path] = None,
     token_usage: Optional[bool] = False,
 ):
     """Processes the provided GitHub repository URL and performs tasks
     to analyze the repository."""
+
     with Progress(
         SpinnerColumn(),
         TextColumn('[bold cyan][progress.description]{task.description}'),
@@ -67,7 +54,10 @@ async def process_repository_tasks(
             f'[bold yellow]{selected_model}[/bold yellow]\n'
             f'[bold cyan][Model Temperature][/bold cyan] '
             f'[bold yellow]{temperature_setting}[/bold yellow] '
-            f'[italic dim](higher values are more random)[/italic dim]'
+            f'[italic dim](higher values are more random)[/italic dim]\n'
+            f'[bold cyan][Display Token Usage Stats][/bold cyan] '
+            f'[bold yellow]{token_usage}[/bold yellow]'
+            f'\n'
         )
 
         task = progress.add_task(description='Processing...', total=None)
@@ -93,6 +83,7 @@ def get_summary_based_on_model(
     repo_data_json, selected_model, temperature_setting
 ):
     """Generates the summary based on the selected model."""
+
     if selected_model == 'groq':
         return get_groq_summary(repo_data_json, temperature_setting)
     return get_gemini_summary(repo_data_json, temperature_setting)
@@ -100,6 +91,7 @@ def get_summary_based_on_model(
 
 async def handle_summary_output(response, output_file, token_usage):
     """Handles output of the generated summary."""
+
     usage = response['usage']
     repo_summary = response['formatted_response']
 
@@ -123,6 +115,7 @@ async def handle_summary_output(response, output_file, token_usage):
 
 def print_token_usage(usage):
     """Prints the token usage."""
+
     formatted_usage = (
         '\n[bold green]Token Usage:[/bold green]\n[bold yellow]-------------'
         '[/bold yellow]\n'
@@ -145,7 +138,8 @@ def print_token_usage(usage):
 
 def handle_error(e):
     """Handles errors during processing."""
-    err_console.print(f'\n[red]🚨 [bold]Something went wrong[/bold] 🚨 {e}\n')
+
+    err_console.print('\n[red]🚨 [bold]Error[/bold] 🚨\n')
     err_console.print(f'[red]{e}[/red]\n')
     err_console.print(
         '[bold yellow]Tip:[/bold yellow] Use '
