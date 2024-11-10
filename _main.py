@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-
 import asyncio
 from pathlib import Path
 from typing import Optional
 
 import typer
 from rich.console import Console
-from typing_extensions import Annotated
 
-from application.utils.callbacks import (
+import _constants
+from application.utils.helpers import (
+    get_cli_version,
     handle_error,
-    load_config_values,
     process_repository_tasks,
-    version_callback,
 )
 from application.utils.parser import load_toml_config
 
-# Console instances for standard and error output
 console = Console(soft_wrap=True)
 err_console = Console(stderr=True, soft_wrap=True)
 
-# Initialize the Typer app
+
 app = typer.Typer(
     no_args_is_help=True,
     help='CLI tool built to obtain in-depth, actionable information about '
@@ -29,91 +26,145 @@ app = typer.Typer(
 
 
 @app.callback(invoke_without_command=True)
-def github_repo_insights(
-    github_repository_url: Annotated[
-        Optional[str],
-        typer.Argument(
-            ..., help='The URL of the GitHub repository to analyze'
-        ),
-    ],
-    version: Annotated[
-        Optional[bool],
-        typer.Option(
-            '--version',
-            '-v',
-            help='Get the version number',
-            is_eager=True,
-            callback=version_callback,
-        ),
-    ] = None,
-    model: Annotated[
-        Optional[str],
-        typer.Option(
-            '--model',
-            '-m',
-            help='Choose the LLM that you want to be used to generate '
-            "insights. Can be 'gemini' or 'groq'.",
-        ),
-    ] = 'gemini',
-    model_temperature: Annotated[
-        Optional[float],
-        typer.Option(
-            '--temperature',
-            '-t',
-            help='Sets the temperature for the model, with a range from '
-            '0.0 (more deterministic) to 2.0 (more random).',
-        ),
-    ] = 0.5,
-    output_file: Annotated[
-        Optional[Path],
-        typer.Option('--output', '-o', help='Path to the output file'),
-    ] = None,
-    token_usage: Annotated[
-        bool,
-        typer.Option('--token-usage', help='Flag for printing token usage'),
-    ] = False,
+def main(
+    version: bool = typer.Option(
+        None,
+        '--version',
+        '-v',
+        help='Show the version of the application',
+        is_eager=True,
+    ),
 ):
     """
-    Main function to analyze a GitHub repository and optionally output the
-    results to a file.
-
-    Args:
-        github_repository_url (str): Required. The URL of the GitHub
-        repository to analyze.
-        version (Optional[bool]): Optional. If provided, prints the version
-        number and exits the application.
-        output_file (Optional[Path]): Optional. If provided, the path to
-        a file where the Markdown summary will be saved.
+    Main function that will run for any subcommand, handles the version option.
     """
+    if version:
+        get_cli_version(version)
 
-    # Load the TOML config from home directory
-    config = load_toml_config('.github-echo-config.toml')
+
+@app.command(
+    name='analyze',
+    help='Analyze a GitHub repository and optionally output the results to a file.',
+)
+def analyze(
+    github_repository_url: str = typer.Argument(
+        ..., help='The URL of the GitHub repository to analyze'
+    ),
+    model: Optional[str] = typer.Option(
+        None,
+        '--model',
+        '-m',
+        help="Choose the LLM to generate insights, e.g., 'gemini' or 'groq'.",
+    ),
+    model_temperature: Optional[float] = typer.Option(
+        None,
+        '--model-temperature',
+        '-t',
+        help='Sets the temperature for the model, ranging from '
+        '0.0 (deterministic) to 2.0 (random).',
+    ),
+    token_usage: Optional[bool] = typer.Option(
+        None, '--show-token-usage', help='Flag for printing token usage'
+    ),
+    output_file: Optional[Path] = typer.Option(
+        None,
+        '--output-file',
+        '-o',
+        help='Choose which file to show the response in (could be a relative or absolute path)',
+    ),
+):
+    config = load_toml_config(_constants.CONFIG_FILE) or {}
     if not config:
         err_console.print(
-            ':warning: [bold yellow]Warning:[/] configuration file not found. '
-            'Using default values.',
+            ':warning: [bold yellow]Warning:[/] configuration file not found. ',
             style='bold yellow',
         )
 
-    # Load configuration values
-    model, model_temperature, output_file, token_usage = load_config_values(
-        config
+    selected_model = (
+        model if model is not None else config.get('settings', {}).get('model')
     )
 
+    temperature_setting = (
+        model_temperature
+        if model_temperature is not None
+        else config.get('settings', {}).get('model_temperature')
+    )
+
+    use_token_usage = (
+        token_usage
+        if token_usage is not None
+        else config.get('settings', {}).get('token_usage')
+    )
+
+    output_path = output_file or config.get('settings', {}).get('output_file')
+
+    task_args = {
+        'repo_url': github_repository_url,
+    }
+
+    if selected_model is not None:
+        task_args['selected_model'] = selected_model
+    if temperature_setting is not None:
+        task_args['temperature_setting'] = temperature_setting
+    if output_path is not None:
+        task_args['output_file'] = output_path
+    if use_token_usage is not None:
+        task_args['token_usage'] = use_token_usage
+
     try:
-        asyncio.run(
-            process_repository_tasks(
-                repo_url=github_repository_url,
-                selected_model=model,
-                temperature_setting=model_temperature,
-                output_file=output_file,
-                token_usage=token_usage,
-            )
-        )
+        asyncio.run(process_repository_tasks(**task_args))
     except Exception as e:
         handle_error(e)
 
 
-# Run the app
+@app.command(
+    name='init',
+    help="Create the .github-echo.toml config file in the user's home directory.",
+)
+def create_config():
+    home_directory = Path.home()
+    config_file_path = home_directory / _constants.CONFIG_FILE
+
+    if config_file_path.exists():
+        console.print(
+            f'[bold yellow]Config file already exists at {config_file_path}[/]'
+        )
+        return
+
+    try:
+        config_file_path.write_text(_constants.DEFAULT_CONFIG.strip())
+        console.print(
+            f'[bold green]Config file created successfully at {config_file_path}[/]'
+        )
+    except Exception as e:
+        console.print(f'[bold red]Error creating config file: {e}[/]')
+
+
+@app.command(
+    name='remove-config',
+    help="Remove the .github-echo.toml configuration file from the user's home directory.",
+)
+def remove_config():
+    """
+    Removes the .github-echo configuration file from the user's home directory if it exists.
+    """
+    home_directory = Path.home()
+    config_file_path = home_directory / _constants.CONFIG_FILE
+
+    if not config_file_path.exists():
+        console.print(
+            f'[bold yellow]Config file not found at {config_file_path}[/]'
+        )
+        return
+
+    try:
+        config_file_path.unlink()
+        console.print(
+            f'[bold red]Config file removed successfully at {config_file_path}[/]'
+        )
+    except Exception as e:
+        console.print(f'[bold red]Error removing config file: {e}[/]')
+
+
 if __name__ == '__main__':
     app()

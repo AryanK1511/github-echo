@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gh-echo"
-version = "0.3.0"
+version = "1.0.0"
 description = "A command-line tool built to obtain in-depth, actionable information about GitHub repositories."
 authors = ["Aryan Khurana <aryankhurana1511@gmail.com>"]
 license = "MIT"
@@ -15,12 +15,12 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 packages = [{include = "application"}]
-include = ["_main.py", "_config.py", "pyproject.toml"]
+include = ["_main.py", "_config.py", "_constants.py", "pyproject.toml"]
 
 [tool.poetry.scripts]
-lint = "_scripts:lint" # Lint all files in the current directory, and fix any fixable errors.
-format = "_scripts:format_code" # Format all files in the current directory
-lint-and-format = "_scripts:lint_and_format" # Lint and format
+lint = "_scripts:lint"
+format = "_scripts:format_code"
+lint-and-format = "_scripts:lint_and_format"
 gh-echo = "_main:app"
 
 [tool.poetry.dependencies]
