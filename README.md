@@ -19,9 +19,6 @@
   <a href="https://github.com/AryanK1511/github-echo/issues">
     <img src="https://img.shields.io/github/issues/AryanK1511/github-echo" alt="GitHub Issues">
   </a>
-  <a href="https://youtu.be/bTbETpn7C9I">
-    <img src="https://img.shields.io/badge/Watch-Demo-red?logo=youtube" alt="Watch Demo">
-  </a>
 </p>
 
 <p align="center">
@@ -34,7 +31,7 @@
 >
 > You should have **Python 3+** installed before using this tool. Download from [python.org](https://www.python.org/downloads/).
 
-Check out the [examples](./_examples/README.md) or watch the [video demo](#github-echo) to learn more about how to use this tool.
+Check out the [examples](./_examples/README.md) and read the [usage instructions](#usage-instructions) to start using this tool.
 
 ![Help Demo](./assets/help-demo.gif)
 

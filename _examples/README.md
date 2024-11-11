@@ -2,72 +2,180 @@
 
 The following examples showcase how to use the `github-echo` tool. Each command demonstrates different options and outputs.
 
-## Basic Command
+- [Getting Help](#getting-help)
+  - [Default Help Menu](#default-help-menu)
+  - [Detailed Help Menu](#detailed-help-menu)
+  - [Help for a Specific Command](#help-for-a-specific-command)
+- [Version Information](#version-information)
+  - [Check the Version](#check-the-version)
+- [Configuration Management](#configuration-management)
+  - [Create a Configuration File](#create-a-configuration-file)
+  - [Remove the Configuration File](#remove-the-configuration-file)
+- [Analyzing GitHub Repositories](#analyzing-github-repositories)
+  - [Analyze a Repository](#analyze-a-repository)
+  - [Output to a File](#output-to-a-file)
+- [Customizing Configurations](#customizing-configurations)
+  - [Modifying Defaults in the Config File](#modifying-defaults-in-the-config-file)
+  - [Disabling Token Usage Display](#disabling-token-usage-display)
+- [Adjusting Parameters](#adjusting-parameters)
+  - [Changing the Temperature](#changing-the-temperature)
+  - [Selecting a Different Model](#selecting-a-different-model)
+- [Author](#author)
 
-```sh
-./_main.py
+## Getting Help
+
+### Default Help Menu
+
+Running the following command displays the help menu:
+
+```bash
+gh-echo
 ```
 
-This command runs the `github-echo` tool and expects a GitHub repository URL or file path as input. Without any arguments, it will display the **help menu**.
+![Help Menu](./assets/images/001.png)
 
-![Basic command](./assets/images/1.png)
+### Detailed Help Menu
 
-## Display Help
+To explicitly access the help menu, use:
 
-```sh
-./_main.py --help
+```bash
+gh-echo --help
 ```
 
-Use this command to display the **help menu**, listing all available options and flags for the tool.
+![Explicit Help Menu](./assets/images/002.png)
 
-![Display Help](./assets/images/2.png)
+### Help for a Specific Command
 
-### Show Version
+To view the help menu for a specific command, such as `analyze`, use:
 
-```sh
-./_main.py --version
+```bash
+gh-echo analyze --help
+```
+
+![Analyze Help Menu](./assets/images/003.png)
+
+---
+
+## Version Information
+
+### Check the Version
+
+Use one of the following commands to see the current version of the tool:
+
+```bash
+gh-echo --version
 # OR
-./_main.py --versionv
+gh-echo -v
 ```
 
-This command outputs the **current version** of the `github-echo` tool.
+![Version](./assets/images/004.png)
 
-![Show Version](./assets/images/3.png)
+---
 
-### Analyze a GitHub Repository
+## Configuration Management
 
-```sh
-./_main.py https://www.github.com/facebook/react
+### Create a Configuration File
+
+To generate a default configuration file:
+
+```bash
+gh-echo init
 ```
 
-Analyze the specified GitHub repository (`facebook/react` in this case). The tool will provide an AI-generated explanation of the repository and output the results in `stdout`.
+![Generate Config](./assets/images/005.png)
 
-![Analyze a GitHub Repository](./assets/images/4.png)
+**The generated configuration file will look similar to this:**
 
-### Specify Output File
+![Generated Config](./assets/images/006.png)
 
-```sh
-./_main.py --output test_file https://www.github.com/facebook/react
+### Remove the Configuration File
+
+To delete the configuration file:
+
+```bash
+gh-echo remove-config
+```
+
+![Remove Config](./assets/images/007.png)
+
+---
+
+## Analyzing GitHub Repositories
+
+### Analyze a Repository
+
+To analyze a GitHub repository:
+
+```bash
+gh-echo analyze https://github.com/AryanK1511/github-echo
+```
+
+![Analyze Repo - Part 1](./assets/images/008.png)  
+![Analyze Repo - Part 2](./assets/images/009.png)
+
+### Output to a File
+
+To redirect the analysis output to a file:
+
+```bash
+gh-echo analyze https://github.com/AryanK1511/github-echo -o output.md
+```
+
+![Output to File](./assets/images/010.png)
+
+**The markdown output will look like this:**
+
+![Markdown Output](./assets/images/011.png)
+
+---
+
+## Customizing Configurations
+
+### Modifying Defaults in the Config File
+
+Adjust the settings in the configuration file as needed. For example:  
+![Modify Config](./assets/images/012.png)
+
+### Disabling Token Usage Display
+
+**By modifying the configuration, you can disable token usage information in the output:**
+
+![Disable Token Usage](./assets/images/013.png)
+
+Alternatively, enable it using the `--show-token-usage` flag:
+
+```bash
+gh-echo analyze https://github.com/AryanK1511/github-echo --show-token-usage
+```
+
+---
+
+## Adjusting Parameters
+
+### Changing the Temperature
+
+Modify the model temperature for the analysis using:
+
+```bash
+gh-echo analyze https://github.com/AryanK1511/github-echo -o output.md -t 1
 # OR
-./_main.py -o test_file https://www.github.com/facebook/react
+gh-echo analyze https://github.com/AryanK1511/github-echo -o output.md --model-temperature 1
 ```
 
-Generate an explanation for the `facebook/react` repository and save the output to `test_file` instead of printing it in the terminal. You can also specify a path here if you want instead of just the name of the file. This path could be `relative` or `absolute`.
+![Change Temperature](./assets/images/014.png)
 
-![Specify output file](./assets/images/5.png)
+### Selecting a Different Model
 
-Here is what the output file would look like.
+Specify a different model for analysis using:
 
-![Output file example](./assets/images/6.png)
-
-### Custom Temperature Setting
-
-```sh
-./_main.py -temperature 1 --output test_file https://www.github.com/facebook/react
+```bash
+gh-echo analyze https://github.com/AryanK1511/PiZone -o output.md -t 1 -m groq
 # OR
-./_main.py -t 1 --output test_file https://www.github.com/facebook/react
+gh-echo analyze https://github.com/AryanK1511/PiZone -o output.md -t 1 --model groq
 ```
 
-Generate an explanation for the repository, but this time with a custom temperature value of `1`. This sets the AI to be less deterministic, producing more creative results. The lesser the temperature, the less creative the model will be. The output is saved in `test_file`.
+![Change Model](./assets/images/015.png)
 
-![Custom Temperature Setting](./assets/images/7.png)
+## Author
+
+[Aryan Khurana](github.com/AryanK1511)
