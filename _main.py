@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import asyncio
 from pathlib import Path
 from typing import Optional
@@ -113,6 +114,7 @@ def analyze(
 
     try:
         asyncio.run(process_repository_tasks(**task_args))
+        typer.Exit(0)
     except Exception as e:
         handle_error(e)
 
